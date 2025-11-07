@@ -1650,7 +1650,7 @@ body {
     
     .website-name-short {
         display: block;
-        font-size: 24px;
+        font-size: 15px;
         font-weight: 800;
         color: #ffffff;
         letter-spacing: 1px;
@@ -1658,7 +1658,7 @@ body {
     
     .website-branding {
         justify-content: center;
-        padding: 8px;
+        padding: 2px;
     }
     
     .sidebar-box {
@@ -2194,8 +2194,9 @@ body {
     }
     
     .dropdown {
-        width: 98%;
-        height: 95vh;
+        left: 210px;
+        width: 80%;
+        height: 50vh;
     }
     
     .dropdown-sidebar {
