@@ -1,6 +1,13 @@
 const USERS_KEY = 'cineverse_users';
 const CURRENT_USER_KEY = 'cineverse_current_user';
 
+const AVATAR_STYLES = ['avataaars', 'bottts', 'personas', 'lorelei', 'adventurer', 'pixel-art', 'fun-emoji'];
+
+function generateAvatarUrl(seed) {
+    const randomStyle = AVATAR_STYLES[Math.floor(Math.random() * AVATAR_STYLES.length)];
+    return `https://api.dicebear.com/7.x/${randomStyle}/svg?seed=${encodeURIComponent(seed)}`;
+}
+
 function getUsers() {
     const users = localStorage.getItem(USERS_KEY);
     return users ? JSON.parse(users) : [];
@@ -22,6 +29,7 @@ function register(name, email, password) {
         name,
         email,
         password,
+        avatar: generateAvatarUrl(email + Date.now()),
         createdAt: new Date().toISOString()
     };
     
@@ -35,10 +43,16 @@ function login(email, password) {
     const user = users.find(u => u.email === email && u.password === password);
     
     if (user) {
+        if (!user.avatar) {
+            user.avatar = generateAvatarUrl(email + user.id);
+            saveUsers(users);
+        }
+        
         const userSession = {
             id: user.id,
             name: user.name,
             email: user.email,
+            avatar: user.avatar,
             createdAt: user.createdAt
         };
         localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(userSession));

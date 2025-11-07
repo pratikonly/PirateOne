@@ -73,11 +73,13 @@ The server is automatically running on port 5000. Just open the webview to acces
 │   └── styles.css      # Main stylesheet
 ├── js/
 │   ├── api.js          # API integration (TMDb, AniList, Videasy)
-│   ├── auth.js         # Authentication logic
+│   ├── auth.js         # Authentication logic with avatar generation
+│   ├── layout.js       # Shared UI components (avatars, branding)
 │   ├── main.js         # Homepage functionality
 │   ├── player.js       # Video player logic
 │   ├── browse.js       # Browse pages logic
-│   └── search.js       # Search functionality
+│   ├── search.js       # Search functionality
+│   └── search-suggestions.js  # Search autocomplete
 └── server.py           # Python HTTP server
 
 ```
@@ -95,11 +97,22 @@ The server is automatically running on port 5000. Just open the webview to acces
 
 ## Technologies Used
 - **Frontend**: HTML5, CSS3, Vanilla JavaScript
-- **APIs**: TMDb API, AniList GraphQL API, Videasy.net Embed API
+- **APIs**: 
+  - TMDb API (movies & TV shows data)
+  - AniList GraphQL API (anime data)
+  - Videasy.net Embed API (video playback)
+  - DiceBear Avatars API (user profile pictures)
 - **Storage**: Browser localStorage
 - **Server**: Python HTTP Server
 
 ## Recent Changes
+- 2025-11-07: Avatar and branding enhancements
+  - Integrated DiceBear Avatars API for unique user profile pictures
+  - Each user gets a random, unique avatar based on their email/ID
+  - Avatars display in profile dropdown and account circle
+  - Made "Made by Pratik" branding clickable to redirect to portfolio
+  - Created layout.js for shared UI components across all pages
+  - Search page now fully functional with auto-redirect and filters
 - 2025-11-07: Complete UI/UX redesign with new layout
   - Implemented dark black (#000000) and #44BB91 color theme
   - Created dual-box sidebar layout with 1:4 ratio and smooth rounded corners
