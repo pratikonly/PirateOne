@@ -51,7 +51,13 @@ async function loadVideo(id, type) {
         if (type === 'movie') {
             details = await getMovieDetails(id);
             const embedUrl = getVideasyEmbedUrl(id, 'movie');
-            videoWrapper.innerHTML = `<iframe src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`;
+            videoWrapper.innerHTML = `<iframe 
+                src="${embedUrl}" 
+                frameborder="0" 
+                allowfullscreen 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="no-referrer-when-downgrade"
+                scrolling="no"></iframe>`;
             
             if (details) {
                 videoTitle.textContent = details.title;
@@ -70,7 +76,13 @@ async function loadVideo(id, type) {
         } else if (type === 'tv') {
             details = await getTVShowDetails(id);
             const embedUrl = getVideasyEmbedUrl(id, 'tv');
-            videoWrapper.innerHTML = `<iframe src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`;
+            videoWrapper.innerHTML = `<iframe 
+                src="${embedUrl}" 
+                frameborder="0" 
+                allowfullscreen 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="no-referrer-when-downgrade"
+                scrolling="no"></iframe>`;
             
             if (details) {
                 videoTitle.textContent = details.name;

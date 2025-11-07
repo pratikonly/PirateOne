@@ -195,7 +195,9 @@ async function searchAnime(query) {
 }
 
 function getVideasyEmbedUrl(tmdbId, type = 'movie') {
-    return `${VIDEASY_EMBED_BASE}?tmdb=${tmdbId}&type=${type}`;
+    // Videasy.net embed format: /api/embed?tmdb={id}&type={movie|tv}
+    // Alternative format that might work better: /embed/tmdb/{type}/{id}
+    return `https://www.videasy.net/embed/tmdb/${type}/${tmdbId}`;
 }
 
 function getTMDBImageUrl(path, size = 'w500') {
