@@ -2,7 +2,6 @@ let currentSlide = 0;
 let slideshowMovies = [];
 let slideshowInterval;
 
-const API_BASE_URL = window.location.protocol + '//' + window.location.hostname + ':3000';
 let currentPage = 1;
 const cardsPerPage = 20;
 
@@ -293,4 +292,47 @@ async function isInWatchlist(itemId, itemType) {
         console.error('Error checking watchlist:', error);
         return false;
     }
+}
+
+function createContentCard(item, type) {
+    const card = document.createElement('div');
+    card.className = 'content-card';
+    
+    let poster, title, rating, year;
+    
+    if (type === 'anime') {
+        poster = item.image || item.coverImage?.large || '';
+        title = item.title?.english || item.title?.romaji || 'Unknown';
+        rating = item.averageScore ? (item.averageScore / 10).toFixed(1) : 'N/A';
+        year = item.seasonYear || '';
+    } else {
+        poster = getTMDBImageUrl(item.poster_path, 'w500');
+        title = item.title || item.name || 'Unknown';
+        rating = item.vote_average ? item.vote_average.toFixed(1) : 'N/A';
+        year = item.release_date ? item.release_date.substring(0, 4) : (item.first_air_date ? item.first_air_date.substring(0, 4) : '');
+    }
+    
+    const ratingColor = getRatingColor(parseFloat(rating));
+    
+    card.innerHTML = `
+        <img src="${poster}" alt="${title}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27200%27 height=%27300%27%3E%3Crect fill=%27%231f1f1f%27 width=%27200%27 height=%27300%27/%3E%3C/svg%3E'">
+        <div class="card-overlay">
+            <h3>${title}</h3>
+            <div class="card-info">
+                <span class="rating" style="color: ${ratingColor}">★ ${rating}</span>
+                ${year ? `<span>${year}</span>` : ''}
+            </div>
+        </div>
+    `;
+    
+    card.addEventListener('click', () => {
+        window.location.href = `player.html?id=${item.id}&type=${type}`;
+    });
+    
+    return card;
+}
+
+function getTMDBImageUrl(path, size = 'w500') {
+    if (!path) return 'data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27200%27 height=%27300%27%3E%3Crect fill=%27%231f1f1f%27 width=%27200%27 height=%27300%27/%3E%3C/svg%3E';
+    return `https://image.tmdb.org/t/p/${size}${path}`;
 }

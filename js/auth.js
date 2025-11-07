@@ -2,7 +2,7 @@ const CURRENT_USER_KEY = 'cineverse_current_user';
 
 const AVATAR_STYLES = ['avataaars', 'bottts', 'personas', 'lorelei', 'adventurer', 'pixel-art', 'fun-emoji'];
 
-const API_BASE_URL = window.location.protocol + '//' + window.location.hostname + ':3000';
+const API_BASE_URL = window.location.protocol + '//' + window.location.hostname + ':5001';
 
 function generateAvatarUrl(seed) {
     const randomStyle = AVATAR_STYLES[Math.floor(Math.random() * AVATAR_STYLES.length)];
