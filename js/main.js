@@ -97,6 +97,7 @@ function createSlide(movie, index) {
     
     const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
     const year = movie.release_date ? movie.release_date.substring(0, 4) : '';
+    const posterUrl = getTMDBImageUrl(movie.poster_path, 'w500');
     
     const ratingColor = getRatingColor(movie.vote_average);
     slide.style.setProperty('--theme-color', ratingColor);
@@ -131,6 +132,9 @@ function createSlide(movie, index) {
                 </button>
             </div>
         </div>
+        <div class="slide-poster">
+            <img src="${posterUrl}" alt="${movie.title || movie.name}">
+        </div>
     `;
     
     return slide;
@@ -149,8 +153,13 @@ function goToSlide(index) {
     const slides = document.querySelectorAll('.slide');
     const indicators = document.querySelectorAll('.indicator');
     
+    slides[currentSlide].classList.add('slide-exit');
     slides[currentSlide].classList.remove('active');
     indicators[currentSlide].classList.remove('active');
+    
+    setTimeout(() => {
+        slides[currentSlide].classList.remove('slide-exit');
+    }, 800);
     
     currentSlide = index;
     
