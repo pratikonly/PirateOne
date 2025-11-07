@@ -1062,12 +1062,49 @@ body {
 }
 
 .recommended-section {
-    margin-top: 50px;
+    margin-top: 30px;
 }
 
 .recommended-section .section-title {
-    font-size: 24px;
-    margin-bottom: 20px;
+    font-size: 20px;
+    margin-bottom: 16px;
+}
+
+.recommended-section .content-slider {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    gap: 14px;
+    padding-bottom: 12px;
+    scroll-behavior: smooth;
+}
+
+.recommended-section .content-slider::-webkit-scrollbar {
+    height: 8px;
+}
+
+.recommended-section .content-slider::-webkit-scrollbar-track {
+    background: rgba(68, 187, 145, 0.1);
+    border-radius: 4px;
+}
+
+.recommended-section .content-slider::-webkit-scrollbar-thumb {
+    background: rgba(68, 187, 145, 0.3);
+    border-radius: 4px;
+}
+
+.recommended-section .content-slider::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-green);
+}
+
+.recommended-section .content-card {
+    min-width: 140px;
+    flex-shrink: 0;
+}
+
+.recommended-section .content-card img {
+    height: 210px;
 }
 
 .player-sidebar {
