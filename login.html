@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CineVerse</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <div class="auth-header">
+            <div class="logo">
+                <svg width="50" height="50" viewBox="0 0 50 50" class="logo-icon">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#e50914;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#b20710;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="25" cy="25" r="23" fill="url(#logoGradient)" />
+                    <path d="M 15 18 L 15 32 L 22 25 Z" fill="white" />
+                    <path d="M 22 18 L 22 32 L 29 25 Z" fill="white" opacity="0.8" />
+                    <path d="M 29 18 L 29 32 L 36 25 Z" fill="white" opacity="0.6" />
+                </svg>
+                <span class="logo-text">CineVerse</span>
+            </div>
+        </div>
+
+        <div class="auth-box">
+            <h1>Sign In</h1>
+            <form id="loginForm">
+                <div class="form-group">
+                    <input type="email" id="email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" placeholder="Password" required>
+                </div>
+                <div class="error-message" id="errorMessage"></div>
+                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            </form>
+            <div class="auth-footer">
+                <p>New to CineVerse? <a href="register.html">Sign up now</a></p>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p class="footer-credit">Made by Pratik</p>
+        </footer>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMessage');
+            
+            if (login(email, password)) {
+                window.location.href = 'index.html';
+            } else {
+                errorDiv.textContent = 'Invalid email or password';
+                errorDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

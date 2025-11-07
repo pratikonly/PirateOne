@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineVerse - Your Ultimate Streaming Experience</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <svg width="50" height="50" viewBox="0 0 50 50" class="logo-icon">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#e50914;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#b20710;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="25" cy="25" r="23" fill="url(#logoGradient)" />
+                    <path d="M 15 18 L 15 32 L 22 25 Z" fill="white" />
+                    <path d="M 22 18 L 22 32 L 29 25 Z" fill="white" opacity="0.8" />
+                    <path d="M 29 18 L 29 32 L 36 25 Z" fill="white" opacity="0.6" />
+                </svg>
+                <span class="logo-text">CineVerse</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="movies.html">Movies</a></li>
+                <li><a href="tvshows.html">TV Shows</a></li>
+                <li><a href="anime.html">Anime</a></li>
+                <li><a href="search.html">Search</a></li>
+            </ul>
+            <div class="nav-right">
+                <div class="search-icon" onclick="window.location.href='search.html'">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </div>
+                <div class="user-menu">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect fill='%23e50914' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='20' fill='white'%3EU%3C/text%3E%3C/svg%3E" alt="User" class="user-avatar" id="userAvatar">
+                    <div class="dropdown">
+                        <a href="profile.html">Profile</a>
+                        <a href="settings.html">Settings</a>
+                        <a href="#" id="logoutBtn">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title" id="heroTitle">Loading...</h1>
+                <p class="hero-description" id="heroDescription">Discover unlimited entertainment</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" id="playBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                        Play
+                    </button>
+                    <button class="btn btn-secondary" id="infoBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        More Info
+                    </button>
+                </div>
+            </div>
+            <div class="hero-fade"></div>
+        </section>
+
+        <section class="content-rows">
+            <div class="content-row">
+                <h2 class="row-title">Trending Movies</h2>
+                <div class="content-slider" id="trendingMovies">
+                    <div class="loading">Loading...</div>
+                </div>
+            </div>
+
+            <div class="content-row">
+                <h2 class="row-title">Popular TV Shows</h2>
+                <div class="content-slider" id="popularTV">
+                    <div class="loading">Loading...</div>
+                </div>
+            </div>
+
+            <div class="content-row">
+                <h2 class="row-title">Top Rated Movies</h2>
+                <div class="content-slider" id="topRatedMovies">
+                    <div class="loading">Loading...</div>
+                </div>
+            </div>
+
+            <div class="content-row">
+                <h2 class="row-title">Trending Anime</h2>
+                <div class="content-slider" id="trendingAnime">
+                    <div class="loading">Loading...</div>
+                </div>
+            </div>
+
+            <div class="content-row">
+                <h2 class="row-title">Action Movies</h2>
+                <div class="content-slider" id="actionMovies">
+                    <div class="loading">Loading...</div>
+                </div>
+            </div>
+
+            <div class="content-row">
+                <h2 class="row-title">Comedy TV Shows</h2>
+                <div class="content-slider" id="comedyTV">
+                    <div class="loading">Loading...</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Help Center</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <p class="footer-credit">Made by Pratik</p>
+            <p class="footer-copyright">&copy; 2024 CineVerse. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

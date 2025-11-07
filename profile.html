@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - CineVerse</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <svg width="50" height="50" viewBox="0 0 50 50" class="logo-icon">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#e50914;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#b20710;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="25" cy="25" r="23" fill="url(#logoGradient)" />
+                    <path d="M 15 18 L 15 32 L 22 25 Z" fill="white" />
+                    <path d="M 22 18 L 22 32 L 29 25 Z" fill="white" opacity="0.8" />
+                    <path d="M 29 18 L 29 32 L 36 25 Z" fill="white" opacity="0.6" />
+                </svg>
+                <span class="logo-text">CineVerse</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="movies.html">Movies</a></li>
+                <li><a href="tvshows.html">TV Shows</a></li>
+                <li><a href="anime.html">Anime</a></li>
+                <li><a href="search.html">Search</a></li>
+            </ul>
+            <div class="nav-right">
+                <div class="search-icon" onclick="window.location.href='search.html'">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </div>
+                <div class="user-menu">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect fill='%23e50914' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='20' fill='white'%3EU%3C/text%3E%3C/svg%3E" alt="User" class="user-avatar">
+                    <div class="dropdown">
+                        <a href="profile.html" class="active">Profile</a>
+                        <a href="settings.html">Settings</a>
+                        <a href="#" id="logoutBtn">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="profile-page">
+        <div class="profile-container">
+            <h1>Profile</h1>
+            
+            <div class="profile-card">
+                <div class="profile-avatar-section">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23e50914' width='120' height='120' rx='60'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='60' fill='white'%3EU%3C/text%3E%3C/svg%3E" alt="User Avatar" class="profile-avatar">
+                </div>
+                
+                <div class="profile-info">
+                    <div class="info-row">
+                        <label>Name:</label>
+                        <span id="profileName">User</span>
+                    </div>
+                    <div class="info-row">
+                        <label>Email:</label>
+                        <span id="profileEmail">user@example.com</span>
+                    </div>
+                    <div class="info-row">
+                        <label>Member Since:</label>
+                        <span id="memberSince">January 2024</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-section">
+                <h2>Watch History</h2>
+                <div class="watch-history" id="watchHistory">
+                    <p class="empty-message">No watch history yet. Start watching!</p>
+                </div>
+            </div>
+
+            <div class="profile-section">
+                <h2>My Ratings</h2>
+                <div class="ratings-list" id="ratingsList">
+                    <p class="empty-message">No ratings yet. Rate some content!</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Help Center</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <p class="footer-credit">Made by Pratik</p>
+            <p class="footer-copyright">&copy; 2024 CineVerse. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        checkAuth();
+        
+        const user = getCurrentUser();
+        if (user) {
+            document.getElementById('profileName').textContent = user.name;
+            document.getElementById('profileEmail').textContent = user.email;
+            document.getElementById('memberSince').textContent = new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        }
+
+        const watchHistory = getWatchHistory();
+        if (watchHistory.length > 0) {
+            const historyContainer = document.getElementById('watchHistory');
+            historyContainer.innerHTML = watchHistory.slice(0, 10).map(item => `
+                <div class="history-item">
+                    <img src="${item.poster}" alt="${item.title}">
+                    <div class="history-info">
+                        <h3>${item.title}</h3>
+                        <p>${new Date(item.watchedAt).toLocaleDateString()}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        const ratings = getRatings();
+        if (ratings.length > 0) {
+            const ratingsContainer = document.getElementById('ratingsList');
+            ratingsContainer.innerHTML = ratings.map(item => `
+                <div class="rating-item">
+                    <img src="${item.poster}" alt="${item.title}">
+                    <div class="rating-info">
+                        <h3>${item.title}</h3>
+                        <div class="stars">${'★'.repeat(item.rating)}${'☆'.repeat(5 - item.rating)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            logout();
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>
