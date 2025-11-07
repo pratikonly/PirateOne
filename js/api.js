@@ -228,7 +228,7 @@ function createContentCard(item, type = 'movie') {
         imageUrl = item.coverImage.large;
         title = formatAnimeTitle(item);
         year = '';
-        rating = item.averageScore ? `${item.averageScore}%` : 'N/A';
+        rating = item.averageScore ? (item.averageScore / 10).toFixed(1) : 'N/A';
     } else {
         imageUrl = getTMDBImageUrl(item.poster_path);
         title = item.title || item.name;
@@ -238,10 +238,14 @@ function createContentCard(item, type = 'movie') {
     
     card.innerHTML = `
         <img src="${imageUrl}" alt="${title}" loading="lazy">
+        ${rating !== 'N/A' ? `<div class="card-rating">
+            <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            ${rating}
+        </div>` : ''}
         <div class="content-card-info">
             <div class="content-card-title">${title}</div>
             <div class="content-card-meta">
-                ${year} ${year && rating !== 'N/A' ? '•' : ''} ${rating !== 'N/A' ? '⭐ ' + rating : ''}
+                ${year}
             </div>
         </div>
     `;

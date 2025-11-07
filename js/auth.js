@@ -61,9 +61,8 @@ function isLoggedIn() {
 }
 
 function checkAuth() {
-    if (!isLoggedIn()) {
-        window.location.href = 'login.html';
-    }
+    // Authentication is now optional, just return user status
+    return isLoggedIn();
 }
 
 function updateUserName(newName) {

@@ -3,7 +3,14 @@ document.addEventListener('DOMContentLoaded', async function() {
         return;
     }
     
-    checkAuth();
+    // Check if user is logged in and update UI accordingly
+    const user = getCurrentUser();
+    if (user) {
+        const userActions = document.getElementById('userActions');
+        const userMenu = document.getElementById('userMenu');
+        if (userActions) userActions.style.display = 'none';
+        if (userMenu) userMenu.style.display = 'block';
+    }
     
     window.addEventListener('scroll', function() {
         const navbar = document.querySelector('.navbar');
