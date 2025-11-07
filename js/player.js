@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', async function() {
     checkAuth();
     
@@ -13,38 +14,71 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     await loadVideo(id, type);
     
-    const stars = document.querySelectorAll('.star');
-    stars.forEach(star => {
-        star.addEventListener('click', function() {
-            const rating = parseInt(this.dataset.rating);
-            setRating(rating);
-            saveRating(id, type, rating);
+    // Toggle sidebar
+    const toggleBtn = document.getElementById('toggleInfoBtn');
+    const sidebar = document.getElementById('playerSidebar');
+    const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+    
+    toggleBtn?.addEventListener('click', function() {
+        sidebar.classList.toggle('hidden');
+    });
+    
+    closeSidebarBtn?.addEventListener('click', function() {
+        sidebar.classList.add('hidden');
+    });
+    
+    // Add to watchlist
+    const addToWatchlistBtn = document.getElementById('addToWatchlistBtn');
+    addToWatchlistBtn?.addEventListener('click', function() {
+        const title = document.getElementById('videoTitle').textContent;
+        const poster = document.getElementById('sidebarPoster').src;
+        
+        addToWatchlist({
+            id: id,
+            type: type,
+            title: title,
+            poster: poster
         });
         
-        star.addEventListener('mouseenter', function() {
-            const rating = parseInt(this.dataset.rating);
-            highlightStars(rating);
-        });
+        addToWatchlistBtn.classList.add('added');
+        addToWatchlistBtn.innerHTML = `
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+            </svg>
+            Added to Watchlist
+        `;
     });
     
-    document.querySelector('.stars-input').addEventListener('mouseleave', function() {
-        const currentRating = getRating(id, type);
-        highlightStars(currentRating);
+    // Share button
+    const shareBtn = document.getElementById('shareBtn');
+    shareBtn?.addEventListener('click', function() {
+        const url = window.location.href;
+        if (navigator.share) {
+            navigator.share({
+                title: document.getElementById('videoTitle').textContent,
+                url: url
+            });
+        } else {
+            navigator.clipboard.writeText(url);
+            alert('Link copied to clipboard!');
+        }
     });
     
-    const currentRating = getRating(id, type);
-    if (currentRating > 0) {
-        highlightStars(currentRating);
-    }
+    // Check if already in watchlist
+    checkIfInWatchlist(id, type);
 });
 
 async function loadVideo(id, type) {
     const videoWrapper = document.getElementById('videoWrapper');
     const videoTitle = document.getElementById('videoTitle');
-    const videoYear = document.getElementById('videoYear');
-    const videoRating = document.getElementById('videoRating');
-    const videoGenres = document.getElementById('videoGenres');
-    const videoOverview = document.getElementById('videoOverview');
+    const sidebarTitle = document.getElementById('sidebarTitle');
+    const sidebarYear = document.getElementById('sidebarYear');
+    const sidebarRating = document.getElementById('sidebarRating');
+    const sidebarOverview = document.getElementById('sidebarOverview');
+    const sidebarGenres = document.getElementById('sidebarGenres');
+    const sidebarPoster = document.getElementById('sidebarPoster');
+    const sidebarCast = document.getElementById('sidebarCast');
+    const recommendedSlider = document.getElementById('recommendedSlider');
     
     try {
         let details;
@@ -60,11 +94,31 @@ async function loadVideo(id, type) {
                 scrolling="no"></iframe>`;
             
             if (details) {
-                videoTitle.textContent = details.title;
-                videoYear.textContent = details.release_date ? details.release_date.substring(0, 4) : '';
-                videoRating.textContent = details.vote_average ? `⭐ ${details.vote_average.toFixed(1)}` : '';
-                videoGenres.textContent = details.genres ? details.genres.map(g => g.name).join(', ') : '';
-                videoOverview.textContent = details.overview || 'No description available.';
+                const title = details.title;
+                const year = details.release_date ? details.release_date.substring(0, 4) : '';
+                const rating = details.vote_average ? `⭐ ${details.vote_average.toFixed(1)}` : '';
+                
+                videoTitle.textContent = title;
+                sidebarTitle.textContent = title;
+                sidebarYear.textContent = year;
+                sidebarRating.textContent = rating;
+                sidebarOverview.textContent = details.overview || 'No description available.';
+                sidebarPoster.src = getTMDBImageUrl(details.poster_path, 'w500');
+                
+                // Load genres
+                if (details.genres && details.genres.length > 0) {
+                    sidebarGenres.innerHTML = details.genres.map(g => 
+                        `<span class="genre-tag">${g.name}</span>`
+                    ).join('');
+                } else {
+                    sidebarGenres.innerHTML = '<span class="genre-tag">N/A</span>';
+                }
+                
+                // Load cast
+                await loadCast(id, 'movie');
+                
+                // Load recommendations
+                await loadRecommendations(id, 'movie');
                 
                 addToWatchHistory({
                     id: details.id,
@@ -85,11 +139,31 @@ async function loadVideo(id, type) {
                 scrolling="no"></iframe>`;
             
             if (details) {
-                videoTitle.textContent = details.name;
-                videoYear.textContent = details.first_air_date ? details.first_air_date.substring(0, 4) : '';
-                videoRating.textContent = details.vote_average ? `⭐ ${details.vote_average.toFixed(1)}` : '';
-                videoGenres.textContent = details.genres ? details.genres.map(g => g.name).join(', ') : '';
-                videoOverview.textContent = details.overview || 'No description available.';
+                const title = details.name;
+                const year = details.first_air_date ? details.first_air_date.substring(0, 4) : '';
+                const rating = details.vote_average ? `⭐ ${details.vote_average.toFixed(1)}` : '';
+                
+                videoTitle.textContent = title;
+                sidebarTitle.textContent = title;
+                sidebarYear.textContent = year;
+                sidebarRating.textContent = rating;
+                sidebarOverview.textContent = details.overview || 'No description available.';
+                sidebarPoster.src = getTMDBImageUrl(details.poster_path, 'w500');
+                
+                // Load genres
+                if (details.genres && details.genres.length > 0) {
+                    sidebarGenres.innerHTML = details.genres.map(g => 
+                        `<span class="genre-tag">${g.name}</span>`
+                    ).join('');
+                } else {
+                    sidebarGenres.innerHTML = '<span class="genre-tag">N/A</span>';
+                }
+                
+                // Load cast
+                await loadCast(id, 'tv');
+                
+                // Load recommendations
+                await loadRecommendations(id, 'tv');
                 
                 addToWatchHistory({
                     id: details.id,
@@ -99,7 +173,6 @@ async function loadVideo(id, type) {
                 });
             }
         } else if (type === 'anime') {
-            // For anime, we're using AniList ID directly
             const embedUrl = getVideasyEmbedUrl(id, 'anime');
             videoWrapper.innerHTML = `<iframe 
                 src="${embedUrl}" 
@@ -110,7 +183,11 @@ async function loadVideo(id, type) {
                 scrolling="no"></iframe>`;
             
             videoTitle.textContent = 'Anime Player';
-            videoOverview.textContent = 'Loading anime content...';
+            sidebarTitle.textContent = 'Anime Player';
+            sidebarOverview.textContent = 'Loading anime content...';
+            sidebarGenres.innerHTML = '<span class="genre-tag">Anime</span>';
+            sidebarCast.innerHTML = '<div class="loading">Cast information not available for anime</div>';
+            recommendedSlider.innerHTML = '<div class="loading">Recommendations not available</div>';
         }
     } catch (error) {
         console.error('Error loading video:', error);
@@ -118,34 +195,79 @@ async function loadVideo(id, type) {
     }
 }
 
-function highlightStars(rating) {
-    const stars = document.querySelectorAll('.star');
-    stars.forEach(star => {
-        const starRating = parseInt(star.dataset.rating);
-        if (starRating <= rating) {
-            star.classList.add('active');
-            star.textContent = '★';
-        } else {
-            star.classList.remove('active');
-            star.textContent = '☆';
-        }
-    });
-}
-
-function setRating(rating) {
-    highlightStars(rating);
-    const message = document.getElementById('ratingMessage');
-    message.textContent = `You rated this ${rating} star${rating > 1 ? 's' : ''}`;
-}
-
-function saveRating(id, type, rating) {
-    const urlParams = new URLSearchParams(window.location.search);
-    const videoTitle = document.getElementById('videoTitle').textContent;
+async function loadCast(id, type) {
+    const sidebarCast = document.getElementById('sidebarCast');
     
-    addRating({
-        id,
-        type,
-        title: videoTitle,
-        poster: 'placeholder'
-    }, rating);
+    try {
+        const endpoint = type === 'movie' ? `/movie/${id}/credits` : `/tv/${id}/credits`;
+        const data = await fetchTMDB(endpoint);
+        
+        if (data && data.cast && data.cast.length > 0) {
+            const topCast = data.cast.slice(0, 6);
+            sidebarCast.innerHTML = topCast.map(member => `
+                <div class="cast-member">
+                    <div class="cast-avatar">
+                        <img src="${member.profile_path ? getTMDBImageUrl(member.profile_path, 'w185') : 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="50" height="50"%3E%3Crect fill="%231f1f1f" width="50" height="50"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="12" fill="%23666"%3E?%3C/text%3E%3C/svg%3E'}" alt="${member.name}">
+                    </div>
+                    <div class="cast-info">
+                        <div class="cast-name">${member.name}</div>
+                        <div class="cast-character">${member.character || 'Unknown role'}</div>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            sidebarCast.innerHTML = '<div class="loading">No cast information available</div>';
+        }
+    } catch (error) {
+        console.error('Error loading cast:', error);
+        sidebarCast.innerHTML = '<div class="loading">Failed to load cast</div>';
+    }
+}
+
+async function loadRecommendations(id, type) {
+    const recommendedSlider = document.getElementById('recommendedSlider');
+    
+    try {
+        const endpoint = type === 'movie' ? `/movie/${id}/recommendations` : `/tv/${id}/recommendations`;
+        const data = await fetchTMDB(endpoint);
+        
+        if (data && data.results && data.results.length > 0) {
+            recommendedSlider.innerHTML = '';
+            data.results.slice(0, 10).forEach(item => {
+                recommendedSlider.appendChild(createContentCard(item, type));
+            });
+        } else {
+            // Fallback to similar content
+            const similarEndpoint = type === 'movie' ? `/movie/${id}/similar` : `/tv/${id}/similar`;
+            const similarData = await fetchTMDB(similarEndpoint);
+            
+            if (similarData && similarData.results && similarData.results.length > 0) {
+                recommendedSlider.innerHTML = '';
+                similarData.results.slice(0, 10).forEach(item => {
+                    recommendedSlider.appendChild(createContentCard(item, type));
+                });
+            } else {
+                recommendedSlider.innerHTML = '<div class="loading">No recommendations available</div>';
+            }
+        }
+    } catch (error) {
+        console.error('Error loading recommendations:', error);
+        recommendedSlider.innerHTML = '<div class="loading">Failed to load recommendations</div>';
+    }
+}
+
+function checkIfInWatchlist(id, type) {
+    const watchlist = JSON.parse(localStorage.getItem('watchlist') || '[]');
+    const isInWatchlist = watchlist.some(item => item.id == id && item.type === type);
+    
+    const addToWatchlistBtn = document.getElementById('addToWatchlistBtn');
+    if (isInWatchlist && addToWatchlistBtn) {
+        addToWatchlistBtn.classList.add('added');
+        addToWatchlistBtn.innerHTML = `
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+            </svg>
+            Added to Watchlist
+        `;
+    }
 }
