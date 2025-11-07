@@ -99,9 +99,18 @@ async function loadVideo(id, type) {
                 });
             }
         } else if (type === 'anime') {
-            videoWrapper.innerHTML = '<div class="loading">Anime playback not available via Videasy. Please use alternative streaming services.</div>';
-            videoTitle.textContent = 'Anime Playback';
-            videoOverview.textContent = 'Anime content from AniList cannot be played directly through Videasy API. Please visit official anime streaming platforms.';
+            // For anime, we're using AniList ID directly
+            const embedUrl = getVideasyEmbedUrl(id, 'anime');
+            videoWrapper.innerHTML = `<iframe 
+                src="${embedUrl}" 
+                frameborder="0" 
+                allowfullscreen 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="no-referrer-when-downgrade"
+                scrolling="no"></iframe>`;
+            
+            videoTitle.textContent = 'Anime Player';
+            videoOverview.textContent = 'Loading anime content...';
         }
     } catch (error) {
         console.error('Error loading video:', error);

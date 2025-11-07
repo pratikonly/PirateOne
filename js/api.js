@@ -195,9 +195,18 @@ async function searchAnime(query) {
 }
 
 function getVideasyEmbedUrl(tmdbId, type = 'movie') {
-    // Videasy.net embed format: /api/embed?tmdb={id}&type={movie|tv}
-    // Alternative format that might work better: /embed/tmdb/{type}/{id}
-    return `https://www.videasy.net/embed/tmdb/${type}/${tmdbId}`;
+    // Videasy.net player URL format:
+    // Movies: https://player.videasy.net/movie/{tmdb_id}
+    // TV Shows: https://player.videasy.net/tv/{tmdb_id}
+    // Anime: https://player.videasy.net/anime/{anilist_id}
+    if (type === 'movie') {
+        return `https://player.videasy.net/movie/${tmdbId}`;
+    } else if (type === 'tv') {
+        return `https://player.videasy.net/tv/${tmdbId}`;
+    } else if (type === 'anime') {
+        return `https://player.videasy.net/anime/${tmdbId}`;
+    }
+    return `https://player.videasy.net/movie/${tmdbId}`;
 }
 
 function getTMDBImageUrl(path, size = 'w500') {
