@@ -36,17 +36,20 @@ CineVerse is a modern, Netflix-style streaming platform built entirely with HTML
 1. Visit https://www.themoviedb.org/
 2. Create a free account
 3. Go to Settings > API
-4. Request an API key (v3 auth)
-5. Copy your API key
+4. Request an API key (select "Developer" option)
+5. Fill out the form (you can say it's for educational/personal use)
+6. Copy your API Key (v3 auth)
 
-### 2. Update API Key
-Open `js/api.js` and replace `YOUR_TMDB_API_KEY` with your actual TMDb API key:
-```javascript
-const TMDB_API_KEY = 'your_actual_api_key_here';
-```
+### 2. Add API Key to Secrets
+The TMDB_API_KEY has already been added to your Replit Secrets. The application will automatically use this key from the environment variable. If you need to update it:
+1. Open the Secrets panel in Replit
+2. Update the TMDB_API_KEY value
+3. Restart the workflow
 
-### 3. Run the Server
+### 3. Using the Application
 The server is automatically running on port 5000. Just open the webview to access CineVerse!
+
+**First-time users**: You'll need to register an account to use CineVerse. Click "Sign up now" on the login page.
 
 ## Project Structure
 ```

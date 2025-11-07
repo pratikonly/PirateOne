@@ -4,9 +4,9 @@ A modern streaming platform built with HTML, CSS, and JavaScript featuring Movie
 
 ## Quick Start
 
-1. Get a free TMDb API key from https://www.themoviedb.org/
-2. Open `js/api.js` and replace `YOUR_TMDB_API_KEY` with your API key
-3. The server is already running - just open the webview!
+1. Get a free TMDb API key from https://www.themoviedb.org/ (Settings > API > Request API Key)
+2. Add your API key to Replit Secrets as `TMDB_API_KEY`
+3. The server is already running - just open the webview and register an account!
 
 ## Features
 
