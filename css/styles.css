@@ -1850,29 +1850,31 @@ body {
     }
     
     .dropdown {
-        width: calc(100% - 80px);
+        width: 90%;
         height: auto;
-        max-height: 85vh;
+        max-height: 80vh;
         left: 50%;
-        top: 80px;
-        transform: translateX(-50%);
+        top: 50%;
+        transform: translate(-50%, -50%);
         border-radius: 12px;
     }
     
     .dropdown-sidebar {
         width: 100%;
-        padding: 15px 12px;
+        padding: 12px;
         border-right: none;
         border-bottom: 1px solid rgba(68, 187, 145, 0.2);
         flex-direction: row;
         overflow-x: auto;
         gap: 8px;
+        flex-shrink: 0;
     }
     
     .dropdown-content {
         width: 100%;
-        padding: 20px 15px;
-        max-height: 60vh;
+        padding: 15px;
+        max-height: calc(80vh - 80px);
+        overflow-y: auto;
     }
     
     .dropdown.active {
@@ -1881,28 +1883,35 @@ body {
     }
     
     .dropdown-nav-item {
-        padding: 12px 10px;
+        padding: 10px 14px;
         font-size: 13px;
+        white-space: nowrap;
     }
     
     .dropdown-header {
-        font-size: 20px;
+        font-size: 18px;
+        margin-bottom: 15px;
     }
     
     .profile-avatar-large {
-        width: 100px;
-        height: 100px;
-        margin-bottom: 20px;
+        width: 90px;
+        height: 90px;
+        margin-bottom: 15px;
     }
     
     .profile-avatar-large svg {
-        width: 50px;
-        height: 50px;
+        width: 45px;
+        height: 45px;
     }
     
     .profile-info-grid {
         grid-template-columns: 1fr;
-        gap: 15px;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+    
+    .profile-info-card {
+        padding: 15px;
     }
     
     .player-layout {
@@ -2155,16 +2164,19 @@ body {
     }
     
     .dropdown {
-        width: calc(100% - 70px);
-        top: 70px;
+        width: 92%;
+        max-height: 85vh;
+        top: 50%;
+        transform: translate(-50%, -50%);
     }
     
     .dropdown-sidebar {
-        padding: 12px 10px;
+        padding: 10px;
     }
     
     .dropdown-content {
-        padding: 15px 12px;
+        padding: 12px;
+        max-height: calc(85vh - 70px);
     }
     
     .content-grid {
@@ -2194,38 +2206,54 @@ body {
     }
     
     .dropdown {
-        left: 210px;
-        width: 80%;
-        height: 50vh;
+        width: 94%;
+        height: auto;
+        max-height: 88vh;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
     }
     
     .dropdown-sidebar {
-        width: 30%;
-        padding: 15px 8px;
+        width: 100%;
+        padding: 10px 8px;
     }
     
     .dropdown-content {
-        width: 70%;
-        padding: 15px;
+        width: 100%;
+        padding: 12px;
+        max-height: calc(88vh - 65px);
     }
     
     .dropdown-nav-item {
-        padding: 10px 8px;
+        padding: 8px 12px;
         font-size: 12px;
     }
     
+    .dropdown-close {
+        top: 12px;
+        right: 12px;
+        font-size: 24px;
+    }
+    
     .profile-section h2 {
-        font-size: 20px;
+        font-size: 18px;
+        margin-bottom: 15px;
     }
     
     .profile-avatar-large {
-        width: 80px;
-        height: 80px;
+        width: 75px;
+        height: 75px;
+        margin-bottom: 12px;
     }
     
     .profile-avatar-large svg {
-        width: 40px;
-        height: 40px;
+        width: 38px;
+        height: 38px;
+    }
+    
+    .profile-info-card {
+        padding: 12px;
     }
     
     .player-video-title {
