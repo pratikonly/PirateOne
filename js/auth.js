@@ -1,9 +1,8 @@
-
 const CURRENT_USER_KEY = 'cineverse_current_user';
 
 const AVATAR_STYLES = ['avataaars', 'bottts', 'personas', 'lorelei', 'adventurer', 'pixel-art', 'fun-emoji'];
 
-const API_BASE = window.location.origin.replace(':5000', ':5001');
+const API_BASE_URL = window.location.protocol + '//' + window.location.hostname + ':3000';
 
 function generateAvatarUrl(seed) {
     const randomStyle = AVATAR_STYLES[Math.floor(Math.random() * AVATAR_STYLES.length)];
@@ -11,21 +10,23 @@ function generateAvatarUrl(seed) {
 }
 
 async function register(name, email, password) {
-    const newUser = {
-        id: Date.now().toString(),
-        name,
-        email,
-        password,
-        avatar: generateAvatarUrl(email + Date.now()),
-        createdAt: new Date().toISOString()
-    };
-    
     try {
-        const response = await fetch(`${API_BASE}/api/register`, {
+        const newUser = {
+            id: Date.now().toString(),
+            name: name,
+            email: email,
+            password: password,
+            avatar: generateAvatarUrl(email + Date.now())
+        };
+
+        const response = await fetch(`${API_BASE_URL}/api/register`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify(newUser)
         });
+
         const data = await response.json();
         return data.success;
     } catch (error) {
@@ -36,12 +37,14 @@ async function register(name, email, password) {
 
 async function login(email, password) {
     try {
-        const response = await fetch(`${API_BASE}/api/login`, {
+        const response = await fetch(`${API_BASE_URL}/api/login`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({ email, password })
         });
-        
+
         if (response.ok) {
             const data = await response.json();
             if (data.success) {
@@ -75,15 +78,15 @@ function checkAuth() {
 
 async function updateUserName(newName) {
     const currentUser = getCurrentUser();
-    
+
     if (currentUser) {
         try {
-            const response = await fetch(`${API_BASE}/api/user/${currentUser.id}`, {
+            const response = await fetch(`${API_BASE_URL}/api/user/${currentUser.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: newName })
             });
-            
+
             if (response.ok) {
                 currentUser.name = newName;
                 localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(currentUser));
@@ -97,9 +100,9 @@ async function updateUserName(newName) {
 async function getWatchHistory() {
     const user = getCurrentUser();
     if (!user) return [];
-    
+
     try {
-        const response = await fetch(`${API_BASE}/api/watch-history/${user.id}`);
+        const response = await fetch(`${API_BASE_URL}/api/watch-history/${user.id}`);
         return await response.json();
     } catch (error) {
         console.error('Get watch history error:', error);
@@ -110,9 +113,9 @@ async function getWatchHistory() {
 async function addToWatchHistory(item) {
     const user = getCurrentUser();
     if (!user) return;
-    
+
     try {
-        await fetch(`${API_BASE}/api/watch-history/${user.id}`, {
+        await fetch(`${API_BASE_URL}/api/watch-history/${user.id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(item)
@@ -125,9 +128,9 @@ async function addToWatchHistory(item) {
 async function getRatings() {
     const user = getCurrentUser();
     if (!user) return [];
-    
+
     try {
-        const response = await fetch(`${API_BASE}/api/ratings/${user.id}`);
+        const response = await fetch(`${API_BASE_URL}/api/ratings/${user.id}`);
         return await response.json();
     } catch (error) {
         console.error('Get ratings error:', error);
@@ -138,9 +141,9 @@ async function getRatings() {
 async function addRating(item, rating) {
     const user = getCurrentUser();
     if (!user) return;
-    
+
     try {
-        await fetch(`${API_BASE}/api/ratings/${user.id}`, {
+        await fetch(`${API_BASE_URL}/api/ratings/${user.id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ...item, rating })
@@ -153,9 +156,9 @@ async function addRating(item, rating) {
 async function getRating(id, type) {
     const user = getCurrentUser();
     if (!user) return 0;
-    
+
     try {
-        const response = await fetch(`${API_BASE}/api/rating/${user.id}/${id}/${type}`);
+        const response = await fetch(`${API_BASE_URL}/api/rating/${user.id}/${id}/${type}`);
         const data = await response.json();
         return data.rating;
     } catch (error) {

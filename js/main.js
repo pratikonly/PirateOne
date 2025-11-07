@@ -2,11 +2,15 @@ let currentSlide = 0;
 let slideshowMovies = [];
 let slideshowInterval;
 
+const API_BASE_URL = window.location.protocol + '//' + window.location.hostname + ':3000';
+let currentPage = 1;
+const cardsPerPage = 20;
+
 document.addEventListener('DOMContentLoaded', async function() {
     if (window.location.pathname.includes('login.html') || window.location.pathname.includes('register.html')) {
         return;
     }
-    
+
     const user = getCurrentUser();
     if (user) {
         const userActions = document.getElementById('userActions');
@@ -14,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (userActions) userActions.style.display = 'none';
         if (userMenu) userMenu.style.display = 'block';
     }
-    
+
     window.addEventListener('scroll', function() {
         const navbar = document.querySelector('.navbar');
         if (navbar) {
@@ -25,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
     });
-    
+
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', function(e) {
@@ -34,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             window.location.href = 'login.html';
         });
     }
-    
+
     if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
         await loadHomepage();
     }
@@ -47,13 +51,13 @@ async function loadHomepage() {
             slideshowMovies = trendingMovies.results.slice(0, 5);
             initializeSlideshow();
         }
-        
+
         await Promise.all([
             loadContentRow('trendingMovies', getTrendingMovies(), 'movie'),
             loadContentRow('popularTV', getPopularTVShows(), 'tv'),
             loadContentRow('trendingAnime', getTrendingAnime(), 'anime')
         ]);
-        
+
     } catch (error) {
         console.error('Error loading homepage:', error);
     }
@@ -61,22 +65,22 @@ async function loadHomepage() {
 
 function initializeSlideshow() {
     const container = document.getElementById('slideshowContainer');
-    
+
     if (!container) return;
-    
+
     container.innerHTML = '';
-    
+
     slideshowMovies.forEach((movie, index) => {
         const slide = createSlide(movie, index);
         container.appendChild(slide);
     });
-    
+
     const prevBtn = document.getElementById('prevSlide');
     const nextBtn = document.getElementById('nextSlide');
-    
+
     if (prevBtn) prevBtn.addEventListener('click', previousSlide);
     if (nextBtn) nextBtn.addEventListener('click', nextSlide);
-    
+
     startAutoSlide();
 }
 
@@ -84,17 +88,17 @@ function createSlide(movie, index) {
     const slide = document.createElement('div');
     slide.className = index === 0 ? 'slide active' : 'slide';
     slide.dataset.index = index;
-    
+
     const backdropUrl = getTMDBImageUrl(movie.backdrop_path, 'original');
     slide.style.backgroundImage = `url('${backdropUrl}')`;
-    
+
     const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
     const year = movie.release_date ? movie.release_date.substring(0, 4) : '';
     const posterUrl = getTMDBImageUrl(movie.poster_path, 'w500');
-    
+
     const ratingColor = getRatingColor(movie.vote_average);
     slide.style.setProperty('--theme-color', ratingColor);
-    
+
     slide.innerHTML = `
         <div class="slide-overlay"></div>
         <div class="slide-content">
@@ -129,7 +133,7 @@ function createSlide(movie, index) {
             <img src="${posterUrl}" alt="${movie.title || movie.name}">
         </div>
     `;
-    
+
     return slide;
 }
 
@@ -144,18 +148,18 @@ function getRatingColor(rating) {
 
 function goToSlide(index) {
     const slides = document.querySelectorAll('.slide');
-    
+
     slides[currentSlide].classList.add('slide-exit');
     slides[currentSlide].classList.remove('active');
-    
+
     setTimeout(() => {
         slides[currentSlide].classList.remove('slide-exit');
     }, 800);
-    
+
     currentSlide = index;
-    
+
     slides[currentSlide].classList.add('active');
-    
+
     resetAutoSlide();
 }
 
@@ -185,7 +189,7 @@ function stopAutoSlide() {
 async function loadContentRow(elementId, dataPromise, type) {
     const container = document.getElementById(elementId);
     if (!container) return;
-    
+
     try {
         let data;
         if (type === 'anime') {
@@ -194,7 +198,7 @@ async function loadContentRow(elementId, dataPromise, type) {
             const response = await dataPromise;
             data = response ? response.results : [];
         }
-        
+
         if (data && data.length > 0) {
             container.innerHTML = '';
             data.slice(0, 20).forEach(item => {
@@ -215,16 +219,14 @@ async function addToWatchlist(id, type, title, poster) {
         alert('Please login to add to watchlist');
         return;
     }
-    
-    const API_BASE = window.location.origin.replace(':5000', ':5001');
-    
+
     try {
-        const response = await fetch(`${API_BASE}/api/watchlist/${user.id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/watchlist/${user.id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id, type, title, poster })
         });
-        
+
         if (response.ok) {
             alert('Added to watchlist!');
         } else {
@@ -233,5 +235,62 @@ async function addToWatchlist(id, type, title, poster) {
     } catch (error) {
         console.error('Add to watchlist error:', error);
         alert('Failed to add to watchlist');
+    }
+}
+
+
+async function toggleWatchlist(itemId, itemType, title, poster) {
+    const user = getCurrentUser();
+    if (!user) {
+        alert('Please login to use the watchlist');
+        return;
+    }
+
+    try {
+        const inWatchlist = await isInWatchlist(itemId, itemType);
+
+        if (inWatchlist) {
+            await fetch(`${API_BASE_URL}/api/watchlist/${user.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: itemId,
+                    type: itemType
+                })
+            });
+            alert('Removed from watchlist');
+        } else {
+            await fetch(`${API_BASE_URL}/api/watchlist/${user.id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: itemId,
+                    type: itemType,
+                    title: title,
+                    poster: poster
+                })
+            });
+            alert('Added to watchlist');
+        }
+    } catch (error) {
+        console.error('Error toggling watchlist:', error);
+    }
+}
+
+async function isInWatchlist(itemId, itemType) {
+    const user = getCurrentUser();
+    if (!user) return false;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/watchlist/${user.id}`);
+        const watchlist = await response.json();
+        return watchlist.some(item => item.item_id === itemId && item.item_type === itemType);
+    } catch (error) {
+        console.error('Error checking watchlist:', error);
+        return false;
     }
 }
