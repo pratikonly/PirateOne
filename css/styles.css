@@ -517,7 +517,7 @@ body {
 .dropdown {
     position: fixed;
     top: 50%;
-    left: 50%;
+    left: 58%;
     transform: translate(-50%, -50%);
     background: rgba(0, 0, 0, 0.95);
     backdrop-filter: blur(20px);
@@ -2206,10 +2206,10 @@ body {
     }
     
     .dropdown {
-        width: 94%;
+        width: 80%;
         height: auto;
         max-height: 88vh;
-        left: 50%;
+        left: 58%;
         top: 50%;
         transform: translate(-50%, -50%);
     }
