@@ -27,25 +27,25 @@ body {
     width: var(--sidebar-width);
     height: 100vh;
     background: var(--bg-black);
-    padding: 20px 15px;
+    padding: 16px 12px;
     z-index: 1000;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 12px;
 }
 
 .sidebar-box {
     background: rgba(68, 187, 145, 0.05);
     border: 1px solid rgba(68, 187, 145, 0.2);
     border-radius: 16px;
-    padding: 16px 12px;
+    padding: 12px 10px;
     display: flex;
     flex-direction: column;
 }
 
 .upper-box {
     flex: 1;
-    gap: 8px;
+    gap: 6px;
 }
 
 .lower-box {
@@ -59,21 +59,21 @@ body {
 }
 
 .top-section {
-    gap: 8px;
-    padding-bottom: 16px;
+    gap: 6px;
+    padding-bottom: 12px;
     border-bottom: 1px solid rgba(68, 187, 145, 0.1);
 }
 
 .bottom-section {
-    gap: 8px;
-    padding-top: 16px;
+    gap: 6px;
+    padding-top: 12px;
 }
 
 .nav-item {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px 14px;
+    padding: 11px 13px;
     color: var(--text-secondary);
     text-decoration: none;
     font-size: 14px;
@@ -95,19 +95,38 @@ body {
 .made-by {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 12px 14px;
-    margin-top: 12px;
-    font-size: 12px;
-    color: var(--text-secondary);
-    border-top: 1px solid rgba(68, 187, 145, 0.1);
+    gap: 10px;
+    padding: 14px;
+    margin-top: 8px;
+    border-top: 1px solid rgba(68, 187, 145, 0.15);
+    border-radius: 12px;
+    background: rgba(68, 187, 145, 0.03);
 }
 
 .brand-logo {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px;
-    background: var(--accent-green);
+    color: var(--accent-green);
+    filter: drop-shadow(0 0 8px rgba(68, 187, 145, 0.3));
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+}
+
+.brand-made {
+    font-size: 10px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.brand-name {
+    font-size: 15px;
+    color: var(--accent-green);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .main-container {
@@ -280,10 +299,19 @@ body {
     transition: opacity 0.8s ease-in-out;
     background-size: cover;
     background-position: center;
+    filter: blur(0);
 }
 
 .slide.active {
     opacity: 1;
+}
+
+.slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+    backdrop-filter: blur(2px);
 }
 
 .slide-overlay {
@@ -342,6 +370,7 @@ body {
     color: var(--text-secondary);
     margin-bottom: 28px;
     max-width: 550px;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
 }
 
 .slide-buttons {
@@ -407,6 +436,38 @@ body {
     background: var(--accent-green);
     width: 30px;
     border-radius: 5px;
+}
+
+.slideshow-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(68, 187, 145, 0.2);
+    border: 2px solid var(--accent-green);
+    color: var(--accent-green);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.slideshow-control:hover {
+    background: var(--accent-green);
+    color: var(--bg-black);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.slideshow-control.prev {
+    left: 20px;
+}
+
+.slideshow-control.next {
+    right: 20px;
 }
 
 .content-wrapper {
@@ -559,6 +620,32 @@ body {
     padding: 50px;
     color: var(--text-secondary);
     font-size: 16px;
+}
+
+.empty-message {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-secondary);
+}
+
+.coming-soon-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 200px);
+    text-align: center;
+}
+
+.coming-soon-message {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--accent-green);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    padding: 40px;
+    border: 3px solid var(--accent-green);
+    border-radius: 20px;
+    background: rgba(68, 187, 145, 0.05);
 }
 
 .auth-page {
@@ -744,15 +831,16 @@ body {
 @media (max-width: 768px) {
     .left-sidebar {
         width: 70px;
+        padding: 12px 6px;
     }
     
     .nav-item span,
-    .made-by span {
+    .brand-text {
         display: none;
     }
     
     .sidebar-box {
-        padding: 12px 8px;
+        padding: 10px 6px;
     }
     
     .main-container {
@@ -786,5 +874,10 @@ body {
     
     .content-grid {
         grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+    
+    .slideshow-control {
+        width: 40px;
+        height: 40px;
     }
 }

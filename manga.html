@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineVerse - Stream Movies, TV Shows & Anime</title>
+    <title>Manga - CineVerse</title>
     <link rel="stylesheet" href="css/styles.css">
     <script src="config.js"></script>
 </head>
@@ -12,7 +12,7 @@
     <nav class="left-sidebar">
         <!-- Upper Box - Home & Search -->
         <div class="sidebar-box upper-box">
-            <a href="index.html" class="nav-item active">
+            <a href="index.html" class="nav-item">
                 <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
                 </svg>
@@ -47,7 +47,7 @@
                     </svg>
                     <span>Anime</span>
                 </a>
-                <a href="manga.html" class="nav-item">
+                <a href="manga.html" class="nav-item active">
                     <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
                     </svg>
@@ -56,13 +56,13 @@
             </div>
 
             <div class="box-section bottom-section">
-                <a href="history.html" id="historyLink" class="nav-item">
+                <a href="history.html" class="nav-item">
                     <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
                     </svg>
                     <span>History</span>
                 </a>
-                <a href="watchlist.html" id="watchlistLink" class="nav-item">
+                <a href="watchlist.html" class="nav-item">
                     <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                     </svg>
@@ -122,90 +122,13 @@
             </div>
         </div>
 
-        <!-- Hero Slideshow Section -->
-        <section class="hero-slideshow" id="heroSlideshow">
-            <div class="slideshow-container" id="slideshowContainer">
-                <!-- Slides will be inserted here dynamically -->
-            </div>
-            <div class="slideshow-indicators" id="slideshowIndicators"></div>
-            <button class="slideshow-control prev" id="prevSlide">
-                <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-                </svg>
-            </button>
-            <button class="slideshow-control next" id="nextSlide">
-                <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
-                </svg>
-            </button>
-        </section>
-
-        <!-- Content Sections -->
+        <!-- Coming Soon Content -->
         <div class="content-wrapper">
-            <div class="content-section">
-                <div class="section-header">
-                    <h2 class="section-title">Trending Movies</h2>
-                    <div class="nav-arrows">
-                        <button class="arrow-btn prev" onclick="scrollContent('trendingMovies', 'left')">
-                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-                            </svg>
-                        </button>
-                        <button class="arrow-btn next" onclick="scrollContent('trendingMovies', 'right')">
-                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="content-slider" id="trendingMovies">
-                    <div class="loading">Loading...</div>
+            <div class="coming-soon-page">
+                <div class="coming-soon-message">
+                    Coming Soon
                 </div>
             </div>
-
-            <div class="content-section">
-                <div class="section-header">
-                    <h2 class="section-title">Trending Shows</h2>
-                    <div class="nav-arrows">
-                        <button class="arrow-btn prev" onclick="scrollContent('popularTV', 'left')">
-                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-                            </svg>
-                        </button>
-                        <button class="arrow-btn next" onclick="scrollContent('popularTV', 'right')">
-                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="content-slider" id="popularTV">
-                    <div class="loading">Loading...</div>
-                </div>
-            </div>
-
-            <div class="content-section">
-                <div class="section-header">
-                    <h2 class="section-title">Trending Anime</h2>
-                    <div class="nav-arrows">
-                        <button class="arrow-btn prev" onclick="scrollContent('trendingAnime', 'left')">
-                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-                            </svg>
-                        </button>
-                        <button class="arrow-btn next" onclick="scrollContent('trendingAnime', 'right')">
-                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="content-slider" id="trendingAnime">
-                    <div class="loading">Loading...</div>
-                </div>
-            </div>
-
-            <!-- Footer -->
             <footer class="site-footer">
                 <p>This site does not store any files on the server, we only linked to the media which is hosted on 3rd party services.</p>
             </footer>
@@ -213,10 +136,7 @@
     </div>
 
     <script src="js/auth.js"></script>
-    <script src="js/api.js"></script>
-    <script src="js/main.js"></script>
     <script>
-        // Quick search functionality
         document.getElementById('quickSearch').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 const query = this.value.trim();
@@ -226,16 +146,17 @@
             }
         });
 
-        // Scroll content function
-        function scrollContent(elementId, direction) {
-            const container = document.getElementById(elementId);
-            const scrollAmount = 400;
-            if (direction === 'left') {
-                container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-            } else {
-                container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-            }
+        const user = getCurrentUser();
+        if (user) {
+            document.getElementById('userActions').style.display = 'none';
+            document.getElementById('userMenu').style.display = 'block';
         }
+
+        document.getElementById('logoutBtn')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            logout();
+            window.location.href = 'login.html';
+        });
     </script>
 </body>
 </html>
