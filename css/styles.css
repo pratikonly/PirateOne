@@ -1123,7 +1123,9 @@ body {
 }
 
 .player-sidebar {
-    background: var(--bg-black);
+    background: rgba(68, 187, 145, 0.05);
+    border: 1px solid rgba(68, 187, 145, 0.2);
+    border-radius: 16px;
     padding: 16px 12px;
     max-height: calc(100vh - 140px);
     overflow-y: auto;
@@ -1131,11 +1133,29 @@ body {
     top: 100px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
 }
 
 .player-sidebar.hidden {
     display: none;
+}
+
+.player-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.player-sidebar::-webkit-scrollbar-track {
+    background: rgba(68, 187, 145, 0.05);
+    border-radius: 3px;
+}
+
+.player-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(68, 187, 145, 0.3);
+    border-radius: 3px;
+}
+
+.player-sidebar::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-green);
 }
 
 .close-sidebar-btn {
