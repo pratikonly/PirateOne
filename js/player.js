@@ -52,6 +52,16 @@ document.addEventListener('DOMContentLoaded', async function() {
             </svg>
             Added to Watchlist
         `;
+    }
+    
+    // Add to watchlist button
+    const addToWatchlistBtn = document.getElementById('addToWatchlistBtn');
+    addToWatchlistBtn?.addEventListener('click', async function() {
+        const title = document.getElementById('videoTitle')?.textContent || 'Unknown';
+        const posterElement = document.querySelector('.sidebar-poster img');
+        const poster = posterElement ? posterElement.src : '';
+        
+        await addToWatchlist(id, type, title, poster);
     });
     
     // Share button
@@ -334,5 +344,47 @@ function checkIfInWatchlist(id, type) {
             </svg>
             Added to Watchlist
         `;
+    }
+}
+
+async function addToWatchlist(id, type, title, poster) {
+    let watchlist = JSON.parse(localStorage.getItem('watchlist') || '[]');
+    
+    const exists = watchlist.find(item => item.id == id && item.type === type);
+    const addToWatchlistBtn = document.getElementById('addToWatchlistBtn');
+    
+    if (!exists) {
+        watchlist.push({
+            id,
+            type,
+            title,
+            poster,
+            addedAt: new Date().toISOString()
+        });
+        localStorage.setItem('watchlist', JSON.stringify(watchlist));
+        
+        if (addToWatchlistBtn) {
+            addToWatchlistBtn.classList.add('added');
+            addToWatchlistBtn.innerHTML = `
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+                Added to Watchlist
+            `;
+        }
+    } else {
+        watchlist = watchlist.filter(item => !(item.id == id && item.type === type));
+        localStorage.setItem('watchlist', JSON.stringify(watchlist));
+        
+        if (addToWatchlistBtn) {
+            addToWatchlistBtn.classList.remove('added');
+            addToWatchlistBtn.innerHTML = `
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                </svg>
+                Add to Watchlist
+            `;
+        }
+    }
     }
 }
