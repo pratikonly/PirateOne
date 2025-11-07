@@ -63,10 +63,14 @@ body {
 }
 
 .website-name {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--accent-green);
-    letter-spacing: 0.5px;
+    font-size: 18px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent-green) 0%, #3aa57d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .middle-box {
