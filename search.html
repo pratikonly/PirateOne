@@ -74,7 +74,7 @@
                 </a>
 
                 <div class="made-by">
-                    <img src="https://i.postimg.cc/GmPv4JhT/image.png" alt="Logo" class="brand-logo">
+                    <img src="https://raw.githubusercontent.com/pratik11500/PratikPortfolio/refs/heads/replit-agent/assets/images/logo.png" alt="Logo" class="brand-logo">
                     <div class="brand-text">
                         <span class="brand-made">Made by</span>
                         <span class="brand-name">Pratik</span>
@@ -115,40 +115,33 @@
             </div>
         </div>
 
-    <main class="search-page">
-        <div class="search-container">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search for movies, TV shows, or anime..." autofocus>
-                <button id="searchBtn" class="btn btn-primary">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.35-4.35"></path>
-                    </svg>
-                    Search
-                </button>
-            </div>
+    <div class="content-wrapper">
+            <div class="browse-page">
+                <div class="browse-header">
+                    <h1>Search</h1>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-type="all">All</button>
+                        <button class="filter-btn" data-type="movie">Movies</button>
+                        <button class="filter-btn" data-type="tv">TV Shows</button>
+                        <button class="filter-btn" data-type="anime">Anime</button>
+                    </div>
+                </div>
 
-            <div class="search-filters">
-                <button class="filter-btn active" data-type="all">All</button>
-                <button class="filter-btn" data-type="movie">Movies</button>
-                <button class="filter-btn" data-type="tv">TV Shows</button>
-                <button class="filter-btn" data-type="anime">Anime</button>
-            </div>
-        </div>
-
-        <div class="search-results">
-            <div id="searchResultsContainer">
-                <div class="search-placeholder">
-                    <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.35-4.35"></path>
-                    </svg>
-                    <h2>Search for content</h2>
-                    <p>Find your favorite movies, TV shows, and anime</p>
+                <div id="searchResultsContainer">
+                    <div class="empty-message">
+                        <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        <p style="margin-top: 20px; font-size: 18px;">Use the search bar above to find content</p>
+                    </div>
                 </div>
             </div>
+
+            <footer class="site-footer">
+                <p>This site does not store any files on the server, we only linked to the media which is hosted on 3rd party services.</p>
+            </footer>
         </div>
-    </main>
     </div>
 
     <footer class="site-footer">
