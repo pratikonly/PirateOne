@@ -1080,13 +1080,10 @@ body {
     overflow-y: auto;
     position: sticky;
     top: 100px;
-    transition: transform 0.3s ease;
 }
 
 .player-sidebar.hidden {
-    transform: translateX(100%);
-    position: fixed;
-    right: -400px;
+    display: none;
 }
 
 .close-sidebar-btn {

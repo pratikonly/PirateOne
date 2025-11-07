@@ -19,13 +19,19 @@ document.addEventListener('DOMContentLoaded', async function() {
     const sidebar = document.getElementById('playerSidebar');
     const closeSidebarBtn = document.getElementById('closeSidebarBtn');
     
-    toggleBtn?.addEventListener('click', function() {
-        sidebar.classList.toggle('hidden');
-    });
+    if (toggleBtn && sidebar) {
+        toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            sidebar.classList.toggle('hidden');
+        });
+    }
     
-    closeSidebarBtn?.addEventListener('click', function() {
-        sidebar.classList.add('hidden');
-    });
+    if (closeSidebarBtn && sidebar) {
+        closeSidebarBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            sidebar.classList.add('hidden');
+        });
+    }
     
     // Add to watchlist
     const addToWatchlistBtn = document.getElementById('addToWatchlistBtn');
