@@ -1,6 +1,6 @@
-const API_BASE_URL = window.location.protocol + '//' + window.location.hostname + ':3000';
 let currentItemId, currentItemType, currentItem;
 let userRating = 0;
+const API_BASE_URL = window.location.origin.replace(':5000', ':5001');
 
 document.addEventListener('DOMContentLoaded', async function() {
     checkAuth();
@@ -376,7 +376,7 @@ async function addToWatchlist(id, type, title, poster) {
             await fetch(`${API_BASE}/api/watchlist/${user.id}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.JSON.stringify({ id, type })
+                body: JSON.stringify({ id, type })
             });
 
             if (addToWatchlistBtn) {
@@ -388,25 +388,31 @@ async function addToWatchlist(id, type, title, poster) {
                     Add to Watchlist
                 `;
             }
+        }
+    } catch (error) {
+        console.error('Watchlist error:', error);
+        alert('Failed to update watchlist');
     }
 }
 
 
-async function addToWatchHistory(itemId, itemType, title, poster) {
+async function addToWatchHistory(item) {
     const user = getCurrentUser();
     if (!user) return;
 
+    const API_BASE = window.location.origin.replace(':5000', ':5001');
+
     try {
-        await fetch(`${API_BASE_URL}/api/watch-history/${user.id}`, {
+        await fetch(`${API_BASE}/api/watch-history/${user.id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                id: itemId,
-                type: itemType,
-                title: title,
-                poster: poster
+                id: item.id,
+                type: item.type,
+                title: item.title,
+                poster: item.poster
             })
         });
     } catch (error) {
