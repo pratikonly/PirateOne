@@ -1,9 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-    checkAuth();
-    
-    const searchInput = document.getElementById('searchInput');
-    const searchBtn = document.getElementById('searchBtn');
-    const filterBtns = document.querySelectorAll('.search-filters .filter-btn');
+    const searchInput = document.getElementById('quickSearch');
+    const filterBtns = document.querySelectorAll('.filter-btn');
     
     let currentType = 'all';
     
@@ -15,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
         performSearch();
     }
     
-    searchBtn.addEventListener('click', performSearch);
     searchInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             performSearch();
@@ -96,10 +92,4 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
         }
     }
-    
-    document.getElementById('logoutBtn').addEventListener('click', function(e) {
-        e.preventDefault();
-        logout();
-        window.location.href = 'login.html';
-    });
 });

@@ -239,15 +239,6 @@
             });
         });
 
-        document.getElementById('quickSearch').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const query = this.value.trim();
-                if (query) {
-                    window.location.href = `search.html?q=${encodeURIComponent(query)}`;
-                }
-            }
-        });
-
         const user = getCurrentUser();
         if (user) {
             document.getElementById('userActions').style.display = 'none';

@@ -60,8 +60,8 @@ async function showSearchSuggestions(query, suggestionsElement) {
 
         if (suggestions.length > 0) {
             suggestionsElement.innerHTML = suggestions.map(item => {
-                const poster = item.type === 'anime' ? item.image : getTMDBImageUrl(item.poster_path, 'w185');
-                const title = item.title || item.name;
+                const poster = item.type === 'anime' ? item.coverImage?.large : getTMDBImageUrl(item.poster_path, 'w185');
+                const title = item.type === 'anime' ? formatAnimeTitle(item) : (item.title || item.name);
                 const year = item.release_date ? item.release_date.substring(0, 4) : (item.first_air_date ? item.first_air_date.substring(0, 4) : '');
                 const typeLabel = item.type === 'movie' ? 'Movie' : item.type === 'tv' ? 'TV Show' : 'Anime';
                 
