@@ -98,6 +98,9 @@ function createSlide(movie, index) {
     const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
     const year = movie.release_date ? movie.release_date.substring(0, 4) : '';
     
+    const ratingColor = getRatingColor(movie.vote_average);
+    slide.style.setProperty('--theme-color', ratingColor);
+    
     slide.innerHTML = `
         <div class="slide-overlay"></div>
         <div class="slide-content">
@@ -133,6 +136,15 @@ function createSlide(movie, index) {
     return slide;
 }
 
+function getRatingColor(rating) {
+    if (!rating) return '#44BB91';
+    if (rating >= 8) return '#00ff88';
+    if (rating >= 7) return '#44BB91';
+    if (rating >= 6) return '#ffaa00';
+    if (rating >= 5) return '#ff7700';
+    return '#ff4444';
+}
+
 function goToSlide(index) {
     const slides = document.querySelectorAll('.slide');
     const indicators = document.querySelectorAll('.indicator');
@@ -159,12 +171,16 @@ function previousSlide() {
 }
 
 function startAutoSlide() {
-    slideshowInterval = setInterval(nextSlide, 5000);
+    slideshowInterval = setInterval(nextSlide, 4000);
 }
 
 function resetAutoSlide() {
     clearInterval(slideshowInterval);
     startAutoSlide();
+}
+
+function stopAutoSlide() {
+    clearInterval(slideshowInterval);
 }
 
 async function loadContentRow(elementId, dataPromise, type) {
