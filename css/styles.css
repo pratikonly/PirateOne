@@ -63,6 +63,7 @@ body {
 }
 
 .website-name {
+    margin-left: 8px;
     font-size: 18px;
     font-weight: 800;
     color: #ffffff;
@@ -687,8 +688,7 @@ body {
 }
 
 .content-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 30px rgba(68, 187, 145, 0.3);
+    transform: scale(1.05);
 }
 
 .content-card img {
