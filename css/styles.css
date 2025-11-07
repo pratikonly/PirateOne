@@ -54,7 +54,6 @@ body {
     gap: 10px;
     padding: 12px;
     margin-bottom: 8px;
-    border-bottom: 1px solid rgba(68, 187, 145, 0.2);
 }
 
 .website-branding img {
@@ -263,14 +262,14 @@ body {
 .dropdown {
     position: fixed;
     top: 50%;
-    left: 50%;
+    left: 59%;
     transform: translate(-50%, -50%);
     background: rgba(0, 0, 0, 0.95);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(68, 187, 145, 0.4);
     border-radius: 16px;
-    width: 90%;
-    height: 90vh;
+    width: 70%;
+    height: 80vh;
     display: none;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
     overflow: hidden;
