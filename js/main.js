@@ -61,21 +61,14 @@ async function loadHomepage() {
 
 function initializeSlideshow() {
     const container = document.getElementById('slideshowContainer');
-    const indicators = document.getElementById('slideshowIndicators');
     
-    if (!container || !indicators) return;
+    if (!container) return;
     
     container.innerHTML = '';
-    indicators.innerHTML = '';
     
     slideshowMovies.forEach((movie, index) => {
         const slide = createSlide(movie, index);
         container.appendChild(slide);
-        
-        const indicator = document.createElement('div');
-        indicator.className = index === 0 ? 'indicator active' : 'indicator';
-        indicator.addEventListener('click', () => goToSlide(index));
-        indicators.appendChild(indicator);
     });
     
     const prevBtn = document.getElementById('prevSlide');
@@ -151,11 +144,9 @@ function getRatingColor(rating) {
 
 function goToSlide(index) {
     const slides = document.querySelectorAll('.slide');
-    const indicators = document.querySelectorAll('.indicator');
     
     slides[currentSlide].classList.add('slide-exit');
     slides[currentSlide].classList.remove('active');
-    indicators[currentSlide].classList.remove('active');
     
     setTimeout(() => {
         slides[currentSlide].classList.remove('slide-exit');
@@ -164,7 +155,6 @@ function goToSlide(index) {
     currentSlide = index;
     
     slides[currentSlide].classList.add('active');
-    indicators[currentSlide].classList.add('active');
     
     resetAutoSlide();
 }

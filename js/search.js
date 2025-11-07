@@ -7,6 +7,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     let currentType = 'all';
     
+    // Check for query parameter and auto-search
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('q');
+    if (query) {
+        searchInput.value = query;
+        performSearch();
+    }
+    
     searchBtn.addEventListener('click', performSearch);
     searchInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {

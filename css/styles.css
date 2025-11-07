@@ -784,7 +784,7 @@ body {
     position: absolute;
     right: 60px;
     top: 50%;
-    transform: translateY(-50%) rotate(-30deg);
+    transform: translateY(-50%) rotate(30deg);
     width: 280px;
     height: 420px;
     border-radius: 16px;
@@ -842,31 +842,6 @@ body {
 
 .add-btn:hover {
     background: rgba(68, 187, 145, 0.25);
-}
-
-.slideshow-indicators {
-    position: absolute;
-    bottom: 25px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 10px;
-    z-index: 10;
-}
-
-.indicator {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.indicator.active {
-    background: var(--accent-green);
-    width: 30px;
-    border-radius: 5px;
 }
 
 .slideshow-control {
