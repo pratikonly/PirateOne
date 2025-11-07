@@ -89,86 +89,124 @@ async function loadVideo(id, type) {
     try {
         let details;
         if (type === 'movie') {
-            details = await getMovieDetails(id);
             const embedUrl = getVideasyEmbedUrl(id, 'movie');
             videoWrapper.innerHTML = `<iframe 
                 src="${embedUrl}" 
                 frameborder="0" 
                 allowfullscreen 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerpolicy="no-referrer-when-downgrade"
-                scrolling="no"></iframe>`;
+                referrerpolicy="origin"
+                scrolling="no"
+                style="border: none;"></iframe>`;
             
-            if (details) {
-                const title = details.title;
-                const year = details.release_date ? details.release_date.substring(0, 4) : 'N/A';
-                const rating = details.vote_average ? `⭐ ${details.vote_average.toFixed(1)}` : 'N/A';
+            try {
+                details = await getMovieDetails(id);
                 
-                videoTitle.textContent = title;
-                movieTitle.textContent = title;
-                movieYear.textContent = year;
-                movieRating.textContent = rating;
-                movieDescription.textContent = details.overview || 'No description available.';
-                moviePoster.src = getTMDBImageUrl(details.poster_path, 'w500');
-                
-                if (details.genres && details.genres.length > 0) {
-                    movieGenres.innerHTML = details.genres.map(g => 
-                        `<span class="genre-tag">${g.name}</span>`
-                    ).join('');
-                } else {
-                    movieGenres.innerHTML = '<span class="genre-tag">N/A</span>';
+                if (details) {
+                    const title = details.title || 'Unknown Title';
+                    const year = details.release_date ? details.release_date.substring(0, 4) : 'N/A';
+                    const rating = details.vote_average ? `⭐ ${details.vote_average.toFixed(1)}` : 'N/A';
+                    
+                    videoTitle.textContent = title;
+                    movieTitle.textContent = title;
+                    movieYear.textContent = year;
+                    movieRating.textContent = rating;
+                    movieDescription.textContent = details.overview || 'No description available.';
+                    
+                    if (details.poster_path) {
+                        moviePoster.src = getTMDBImageUrl(details.poster_path, 'w500');
+                    } else {
+                        moviePoster.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="150"%3E%3Crect fill="%231f1f1f" width="100" height="150"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="14" fill="%23666"%3ENo Image%3C/text%3E%3C/svg%3E';
+                    }
+                    
+                    if (details.genres && details.genres.length > 0) {
+                        movieGenres.innerHTML = details.genres.map(g => 
+                            `<span class="genre-tag">${g.name}</span>`
+                        ).join('');
+                    } else {
+                        movieGenres.innerHTML = '<span class="genre-tag">N/A</span>';
+                    }
+                    
+                    await loadMovieCast(id);
+                    await loadRecommendations(id, 'movie');
+                    
+                    addToWatchHistory({
+                        id: details.id,
+                        type: 'movie',
+                        title: details.title,
+                        poster: getTMDBImageUrl(details.poster_path)
+                    });
                 }
-                
-                await loadMovieCast(id);
-                await loadRecommendations(id, 'movie');
-                
-                addToWatchHistory({
-                    id: details.id,
-                    type: 'movie',
-                    title: details.title,
-                    poster: getTMDBImageUrl(details.poster_path)
-                });
+            } catch (apiError) {
+                console.warn('Could not load movie details from TMDB:', apiError);
+                videoTitle.textContent = 'Movie Player';
+                movieTitle.textContent = 'Movie Player';
+                movieDescription.textContent = 'Enjoy your movie!';
+                movieGenres.innerHTML = '<span class="genre-tag">Movie</span>';
+                movieCast.innerHTML = '<div class="loading">Details not available</div>';
+                if (recommendedSlider) {
+                    recommendedSlider.innerHTML = '<div class="loading">Recommendations not available</div>';
+                }
             }
         } else if (type === 'tv') {
-            details = await getTVShowDetails(id);
             const embedUrl = getVideasyEmbedUrl(id, 'tv');
             videoWrapper.innerHTML = `<iframe 
                 src="${embedUrl}" 
                 frameborder="0" 
                 allowfullscreen 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerpolicy="no-referrer-when-downgrade"
-                scrolling="no"></iframe>`;
+                referrerpolicy="origin"
+                scrolling="no"
+                style="border: none;"></iframe>`;
             
-            if (details) {
-                const title = details.name;
-                const year = details.first_air_date ? details.first_air_date.substring(0, 4) : 'N/A';
-                const rating = details.vote_average ? `⭐ ${details.vote_average.toFixed(1)}` : 'N/A';
+            try {
+                details = await getTVShowDetails(id);
                 
-                videoTitle.textContent = title;
-                movieTitle.textContent = title;
-                movieYear.textContent = year;
-                movieRating.textContent = rating;
-                movieDescription.textContent = details.overview || 'No description available.';
-                moviePoster.src = getTMDBImageUrl(details.poster_path, 'w500');
-                
-                if (details.genres && details.genres.length > 0) {
-                    movieGenres.innerHTML = details.genres.map(g => 
-                        `<span class="genre-tag">${g.name}</span>`
-                    ).join('');
-                } else {
-                    movieGenres.innerHTML = '<span class="genre-tag">N/A</span>';
+                if (details) {
+                    const title = details.name || 'Unknown Title';
+                    const year = details.first_air_date ? details.first_air_date.substring(0, 4) : 'N/A';
+                    const rating = details.vote_average ? `⭐ ${details.vote_average.toFixed(1)}` : 'N/A';
+                    
+                    videoTitle.textContent = title;
+                    movieTitle.textContent = title;
+                    movieYear.textContent = year;
+                    movieRating.textContent = rating;
+                    movieDescription.textContent = details.overview || 'No description available.';
+                    
+                    if (details.poster_path) {
+                        moviePoster.src = getTMDBImageUrl(details.poster_path, 'w500');
+                    } else {
+                        moviePoster.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="150"%3E%3Crect fill="%231f1f1f" width="100" height="150"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="14" fill="%23666"%3ENo Image%3C/text%3E%3C/svg%3E';
+                    }
+                    
+                    if (details.genres && details.genres.length > 0) {
+                        movieGenres.innerHTML = details.genres.map(g => 
+                            `<span class="genre-tag">${g.name}</span>`
+                        ).join('');
+                    } else {
+                        movieGenres.innerHTML = '<span class="genre-tag">N/A</span>';
+                    }
+                    
+                    await loadMovieCast(id, 'tv');
+                    await loadRecommendations(id, 'tv');
+                    
+                    addToWatchHistory({
+                        id: details.id,
+                        type: 'tv',
+                        title: details.name,
+                        poster: getTMDBImageUrl(details.poster_path)
+                    });
                 }
-                
-                await loadMovieCast(id, 'tv');
-                await loadRecommendations(id, 'tv');
-                
-                addToWatchHistory({
-                    id: details.id,
-                    type: 'tv',
-                    title: details.name,
-                    poster: getTMDBImageUrl(details.poster_path)
-                });
+            } catch (apiError) {
+                console.warn('Could not load TV show details from TMDB:', apiError);
+                videoTitle.textContent = 'TV Show Player';
+                movieTitle.textContent = 'TV Show Player';
+                movieDescription.textContent = 'Enjoy your show!';
+                movieGenres.innerHTML = '<span class="genre-tag">TV Show</span>';
+                movieCast.innerHTML = '<div class="loading">Details not available</div>';
+                if (recommendedSlider) {
+                    recommendedSlider.innerHTML = '<div class="loading">Recommendations not available</div>';
+                }
             }
         } else if (type === 'anime') {
             const embedUrl = getVideasyEmbedUrl(id, 'anime');
@@ -177,12 +215,13 @@ async function loadVideo(id, type) {
                 frameborder="0" 
                 allowfullscreen 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerpolicy="no-referrer-when-downgrade"
-                scrolling="no"></iframe>`;
+                referrerpolicy="origin"
+                scrolling="no"
+                style="border: none;"></iframe>`;
             
             videoTitle.textContent = 'Anime Player';
             movieTitle.textContent = 'Anime Player';
-            movieDescription.textContent = 'Loading anime content...';
+            movieDescription.textContent = 'Enjoy your anime!';
             movieGenres.innerHTML = '<span class="genre-tag">Anime</span>';
             movieCast.innerHTML = '<div class="loading">Cast information not available</div>';
             if (recommendedSlider) {
