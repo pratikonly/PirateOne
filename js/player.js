@@ -33,32 +33,11 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
     }
     
-    // Add to watchlist
-    const addToWatchlistBtn = document.getElementById('addToWatchlistBtn');
-    addToWatchlistBtn?.addEventListener('click', function() {
-        const title = document.getElementById('videoTitle').textContent;
-        
-        addToWatchlist({
-            id: id,
-            type: type,
-            title: title,
-            poster: ''
-        });
-        
-        addToWatchlistBtn.classList.add('added');
-        addToWatchlistBtn.innerHTML = `
-            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-            </svg>
-            Added to Watchlist
-        `;
-    }
-    
     // Add to watchlist button
     const addToWatchlistBtn = document.getElementById('addToWatchlistBtn');
     addToWatchlistBtn?.addEventListener('click', async function() {
         const title = document.getElementById('videoTitle')?.textContent || 'Unknown';
-        const posterElement = document.querySelector('.sidebar-poster img');
+        const posterElement = document.querySelector('.movie-poster-small img');
         const poster = posterElement ? posterElement.src : '';
         
         await addToWatchlist(id, type, title, poster);
@@ -111,6 +90,7 @@ async function loadVideo(id, type) {
             
             try {
                 details = await getMovieDetails(id);
+                console.log('Movie details:', details);
                 
                 if (details) {
                     const title = details.title || 'Unknown Title';
@@ -171,6 +151,7 @@ async function loadVideo(id, type) {
             
             try {
                 details = await getTVShowDetails(id);
+                console.log('TV show details:', details);
                 
                 if (details) {
                     const title = details.name || 'Unknown Title';
@@ -385,6 +366,5 @@ async function addToWatchlist(id, type, title, poster) {
                 Add to Watchlist
             `;
         }
-    }
     }
 }
