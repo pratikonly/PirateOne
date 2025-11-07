@@ -1071,7 +1071,7 @@ body {
 }
 
 .recommended-section .content-slider {
-    max-width: 100%;
+    max-width: 30%;
     overflow-x: auto;
     overflow-y: hidden;
     display: flex;
@@ -1122,6 +1122,7 @@ body {
 }
 
 .player-sidebar {
+    margin-left: -170%;
     width: 380px;
     background: var(--bg-black);
     padding: 16px 12px;
