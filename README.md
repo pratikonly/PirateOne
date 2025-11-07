@@ -19,5 +19,3 @@ A modern streaming platform built with HTML, CSS, and JavaScript featuring Movie
 - 🌙 Dark theme UI
 
 **Made by Pratik**
-
-For detailed documentation, see [replit.md](replit.md)
