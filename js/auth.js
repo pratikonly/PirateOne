@@ -1,29 +1,16 @@
-const USERS_KEY = 'cineverse_users';
+
 const CURRENT_USER_KEY = 'cineverse_current_user';
 
 const AVATAR_STYLES = ['avataaars', 'bottts', 'personas', 'lorelei', 'adventurer', 'pixel-art', 'fun-emoji'];
+
+const API_BASE = window.location.origin.replace(':5000', ':5001');
 
 function generateAvatarUrl(seed) {
     const randomStyle = AVATAR_STYLES[Math.floor(Math.random() * AVATAR_STYLES.length)];
     return `https://api.dicebear.com/7.x/${randomStyle}/svg?seed=${encodeURIComponent(seed)}`;
 }
 
-function getUsers() {
-    const users = localStorage.getItem(USERS_KEY);
-    return users ? JSON.parse(users) : [];
-}
-
-function saveUsers(users) {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-}
-
-function register(name, email, password) {
-    const users = getUsers();
-    
-    if (users.find(u => u.email === email)) {
-        return false;
-    }
-    
+async function register(name, email, password) {
     const newUser = {
         id: Date.now().toString(),
         name,
@@ -33,32 +20,40 @@ function register(name, email, password) {
         createdAt: new Date().toISOString()
     };
     
-    users.push(newUser);
-    saveUsers(users);
-    return true;
+    try {
+        const response = await fetch(`${API_BASE}/api/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newUser)
+        });
+        const data = await response.json();
+        return data.success;
+    } catch (error) {
+        console.error('Registration error:', error);
+        return false;
+    }
 }
 
-function login(email, password) {
-    const users = getUsers();
-    const user = users.find(u => u.email === email && u.password === password);
-    
-    if (user) {
-        if (!user.avatar) {
-            user.avatar = generateAvatarUrl(email + user.id);
-            saveUsers(users);
-        }
+async function login(email, password) {
+    try {
+        const response = await fetch(`${API_BASE}/api/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
         
-        const userSession = {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            avatar: user.avatar,
-            createdAt: user.createdAt
-        };
-        localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(userSession));
-        return true;
+        if (response.ok) {
+            const data = await response.json();
+            if (data.success) {
+                localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(data.user));
+                return true;
+            }
+        }
+        return false;
+    } catch (error) {
+        console.error('Login error:', error);
+        return false;
     }
-    return false;
 }
 
 function logout() {
@@ -75,75 +70,96 @@ function isLoggedIn() {
 }
 
 function checkAuth() {
-    // Authentication is now optional, just return user status
     return isLoggedIn();
 }
 
-function updateUserName(newName) {
-    const users = getUsers();
+async function updateUserName(newName) {
     const currentUser = getCurrentUser();
     
     if (currentUser) {
-        const userIndex = users.findIndex(u => u.id === currentUser.id);
-        if (userIndex !== -1) {
-            users[userIndex].name = newName;
-            saveUsers(users);
+        try {
+            const response = await fetch(`${API_BASE}/api/user/${currentUser.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: newName })
+            });
             
-            currentUser.name = newName;
-            localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(currentUser));
+            if (response.ok) {
+                currentUser.name = newName;
+                localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(currentUser));
+            }
+        } catch (error) {
+            console.error('Update user error:', error);
         }
     }
 }
 
-function getWatchHistory() {
-    const history = localStorage.getItem('watchHistory');
-    return history ? JSON.parse(history) : [];
-}
-
-function addToWatchHistory(item) {
-    const history = getWatchHistory();
-    const existingIndex = history.findIndex(h => h.id === item.id && h.type === item.type);
+async function getWatchHistory() {
+    const user = getCurrentUser();
+    if (!user) return [];
     
-    if (existingIndex !== -1) {
-        history.splice(existingIndex, 1);
+    try {
+        const response = await fetch(`${API_BASE}/api/watch-history/${user.id}`);
+        return await response.json();
+    } catch (error) {
+        console.error('Get watch history error:', error);
+        return [];
     }
-    
-    history.unshift({
-        ...item,
-        watchedAt: new Date().toISOString()
-    });
-    
-    if (history.length > 50) {
-        history.pop();
-    }
-    
-    localStorage.setItem('watchHistory', JSON.stringify(history));
 }
 
-function getRatings() {
-    const ratings = localStorage.getItem('ratings');
-    return ratings ? JSON.parse(ratings) : [];
-}
-
-function addRating(item, rating) {
-    const ratings = getRatings();
-    const existingIndex = ratings.findIndex(r => r.id === item.id && r.type === item.type);
+async function addToWatchHistory(item) {
+    const user = getCurrentUser();
+    if (!user) return;
     
-    if (existingIndex !== -1) {
-        ratings[existingIndex].rating = rating;
-    } else {
-        ratings.push({
-            ...item,
-            rating,
-            ratedAt: new Date().toISOString()
+    try {
+        await fetch(`${API_BASE}/api/watch-history/${user.id}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(item)
         });
+    } catch (error) {
+        console.error('Add to watch history error:', error);
     }
-    
-    localStorage.setItem('ratings', JSON.stringify(ratings));
 }
 
-function getRating(id, type) {
-    const ratings = getRatings();
-    const rating = ratings.find(r => r.id === id && r.type === type);
-    return rating ? rating.rating : 0;
+async function getRatings() {
+    const user = getCurrentUser();
+    if (!user) return [];
+    
+    try {
+        const response = await fetch(`${API_BASE}/api/ratings/${user.id}`);
+        return await response.json();
+    } catch (error) {
+        console.error('Get ratings error:', error);
+        return [];
+    }
+}
+
+async function addRating(item, rating) {
+    const user = getCurrentUser();
+    if (!user) return;
+    
+    try {
+        await fetch(`${API_BASE}/api/ratings/${user.id}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...item, rating })
+        });
+    } catch (error) {
+        console.error('Add rating error:', error);
+    }
+}
+
+async function getRating(id, type) {
+    const user = getCurrentUser();
+    if (!user) return 0;
+    
+    try {
+        const response = await fetch(`${API_BASE}/api/rating/${user.id}/${id}/${type}`);
+        const data = await response.json();
+        return data.rating;
+    } catch (error) {
+        console.error('Get rating error:', error);
+        return 0;
+    }
 }

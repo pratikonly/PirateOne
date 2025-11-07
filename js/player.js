@@ -312,39 +312,19 @@ async function loadRecommendations(id, type) {
     }
 }
 
-function checkIfInWatchlist(id, type) {
-    const watchlist = JSON.parse(localStorage.getItem('watchlist') || '[]');
-    const isInWatchlist = watchlist.some(item => item.id == id && item.type === type);
+async function checkIfInWatchlist(id, type) {
+    const user = getCurrentUser();
+    if (!user) return;
     
-    const addToWatchlistBtn = document.getElementById('addToWatchlistBtn');
-    if (isInWatchlist && addToWatchlistBtn) {
-        addToWatchlistBtn.classList.add('added');
-        addToWatchlistBtn.innerHTML = `
-            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-            </svg>
-            Added to Watchlist
-        `;
-    }
-}
-
-async function addToWatchlist(id, type, title, poster) {
-    let watchlist = JSON.parse(localStorage.getItem('watchlist') || '[]');
+    const API_BASE = window.location.origin.replace(':5000', ':5001');
     
-    const exists = watchlist.find(item => item.id == id && item.type === type);
-    const addToWatchlistBtn = document.getElementById('addToWatchlistBtn');
-    
-    if (!exists) {
-        watchlist.push({
-            id,
-            type,
-            title,
-            poster,
-            addedAt: new Date().toISOString()
-        });
-        localStorage.setItem('watchlist', JSON.stringify(watchlist));
+    try {
+        const response = await fetch(`${API_BASE}/api/watchlist/${user.id}`);
+        const watchlist = await response.json();
+        const isInWatchlist = watchlist.some(item => item.item_id == id && item.item_type === type);
         
-        if (addToWatchlistBtn) {
+        const addToWatchlistBtn = document.getElementById('addToWatchlistBtn');
+        if (isInWatchlist && addToWatchlistBtn) {
             addToWatchlistBtn.classList.add('added');
             addToWatchlistBtn.innerHTML = `
                 <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
@@ -353,18 +333,57 @@ async function addToWatchlist(id, type, title, poster) {
                 Added to Watchlist
             `;
         }
-    } else {
-        watchlist = watchlist.filter(item => !(item.id == id && item.type === type));
-        localStorage.setItem('watchlist', JSON.stringify(watchlist));
+    } catch (error) {
+        console.error('Check watchlist error:', error);
+    }
+}
+
+async function addToWatchlist(id, type, title, poster) {
+    const user = getCurrentUser();
+    if (!user) {
+        alert('Please login to add to watchlist');
+        return;
+    }
+    
+    const API_BASE = window.location.origin.replace(':5000', ':5001');
+    const addToWatchlistBtn = document.getElementById('addToWatchlistBtn');
+    
+    try {
+        const checkResponse = await fetch(`${API_BASE}/api/watchlist/${user.id}`);
+        const watchlist = await checkResponse.json();
+        const exists = watchlist.find(item => item.item_id == id && item.item_type === type);
         
-        if (addToWatchlistBtn) {
-            addToWatchlistBtn.classList.remove('added');
-            addToWatchlistBtn.innerHTML = `
-                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-                </svg>
-                Add to Watchlist
-            `;
-        }
+        if (!exists) {
+            await fetch(`${API_BASE}/api/watchlist/${user.id}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, type, title, poster })
+            });
+            
+            if (addToWatchlistBtn) {
+                addToWatchlistBtn.classList.add('added');
+                addToWatchlistBtn.innerHTML = `
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                    </svg>
+                    Added to Watchlist
+                `;
+            }
+        } else {
+            await fetch(`${API_BASE}/api/watchlist/${user.id}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, type })
+            });
+            
+            if (addToWatchlistBtn) {
+                addToWatchlistBtn.classList.remove('added');
+                addToWatchlistBtn.innerHTML = `
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                    </svg>
+                    Add to Watchlist
+                `;
+            }
     }
 }

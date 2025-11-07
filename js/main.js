@@ -209,21 +209,29 @@ async function loadContentRow(elementId, dataPromise, type) {
     }
 }
 
-function addToWatchlist(id, type, title, poster) {
-    let watchlist = JSON.parse(localStorage.getItem('watchlist') || '[]');
+async function addToWatchlist(id, type, title, poster) {
+    const user = getCurrentUser();
+    if (!user) {
+        alert('Please login to add to watchlist');
+        return;
+    }
     
-    const exists = watchlist.find(item => item.id === id && item.type === type);
-    if (!exists) {
-        watchlist.push({
-            id,
-            type,
-            title,
-            poster,
-            addedAt: new Date().toISOString()
+    const API_BASE = window.location.origin.replace(':5000', ':5001');
+    
+    try {
+        const response = await fetch(`${API_BASE}/api/watchlist/${user.id}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id, type, title, poster })
         });
-        localStorage.setItem('watchlist', JSON.stringify(watchlist));
-        alert('Added to watchlist!');
-    } else {
-        alert('Already in watchlist!');
+        
+        if (response.ok) {
+            alert('Added to watchlist!');
+        } else {
+            alert('Already in watchlist!');
+        }
+    } catch (error) {
+        console.error('Add to watchlist error:', error);
+        alert('Failed to add to watchlist');
     }
 }
