@@ -95,6 +95,24 @@ function updateUserName(newName) {
     }
 }
 
+function changeUserAvatar() {
+    const users = getUsers();
+    const currentUser = getCurrentUser();
+    
+    if (currentUser) {
+        const newAvatar = generateAvatarUrl(currentUser.email + Date.now() + Math.random());
+        const userIndex = users.findIndex(u => u.id === currentUser.id);
+        
+        if (userIndex !== -1) {
+            users[userIndex].avatar = newAvatar;
+            saveUsers(users);
+            
+            currentUser.avatar = newAvatar;
+            localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(currentUser));
+        }
+    }
+}
+
 function getWatchHistory() {
     const history = localStorage.getItem('watchHistory');
     return history ? JSON.parse(history) : [];
