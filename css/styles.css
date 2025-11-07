@@ -1004,6 +1004,7 @@ body {
 
 .video-wrapper {
     width: 100%;
+    max-width: 900px;
     aspect-ratio: 16/9;
     background: #000;
     margin-bottom: 20px;
