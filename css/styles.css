@@ -44,7 +44,7 @@ body {
 }
 
 .upper-box {
-    flex: 1;
+    flex: 0 0 auto;
     gap: 6px;
 }
 
@@ -70,9 +70,14 @@ body {
     letter-spacing: 0.5px;
 }
 
+.middle-box {
+    flex: 1;
+    gap: 6px;
+}
+
 .lower-box {
-    flex: 4;
-    justify-content: space-between;
+    flex: 0 0 auto;
+    gap: 6px;
 }
 
 .box-section {
@@ -82,13 +87,10 @@ body {
 
 .top-section {
     gap: 6px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid rgba(68, 187, 145, 0.1);
 }
 
 .bottom-section {
     gap: 6px;
-    padding-top: 12px;
 }
 
 .nav-item {
@@ -239,7 +241,8 @@ body {
     width: 45px;
     height: 45px;
     border-radius: 50%;
-    background: var(--accent-green);
+    background: transparent;
+    border: 2px solid var(--accent-green);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -249,10 +252,12 @@ body {
 
 .account-circle:hover {
     transform: scale(1.1);
+    border-color: #3aa57d;
+    box-shadow: 0 0 15px rgba(68, 187, 145, 0.4);
 }
 
 .account-circle svg {
-    color: var(--bg-black);
+    color: var(--accent-green);
 }
 
 .dropdown {
@@ -260,22 +265,108 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(68, 187, 145, 0.1);
+    background: rgba(0, 0, 0, 0.95);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(68, 187, 145, 0.4);
     border-radius: 16px;
-    width: 75%;
-    max-width: 600px;
+    width: 90%;
+    height: 90vh;
     display: none;
-    flex-direction: column;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
     overflow: hidden;
     z-index: 9999;
-    padding: 30px;
 }
 
 .dropdown.active {
     display: flex;
+}
+
+.dropdown-sidebar {
+    width: 20%;
+    background: rgba(68, 187, 145, 0.05);
+    border-right: 1px solid rgba(68, 187, 145, 0.2);
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dropdown-content {
+    width: 80%;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+.dropdown-nav-item {
+    padding: 14px 18px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: block;
+}
+
+.dropdown-nav-item:hover,
+.dropdown-nav-item.active {
+    background: var(--accent-green);
+    color: var(--bg-black);
+}
+
+.profile-section {
+    margin-bottom: 40px;
+}
+
+.profile-section h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: var(--accent-green);
+}
+
+.profile-avatar-large {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid var(--accent-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 30px;
+    background: transparent;
+}
+
+.profile-avatar-large svg {
+    width: 60px;
+    height: 60px;
+    color: var(--accent-green);
+}
+
+.profile-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.profile-info-card {
+    background: rgba(68, 187, 145, 0.08);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(68, 187, 145, 0.2);
+}
+
+.profile-info-card label {
+    display: block;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.profile-info-card span {
+    font-size: 16px;
+    color: var(--text-primary);
+    font-weight: 500;
 }
 
 .modal-backdrop {
@@ -333,7 +424,7 @@ body {
 
 .hero-slideshow {
     position: relative;
-    height: 550px;
+    height: 400px;
     margin: 30px 40px;
     border-radius: 20px;
     overflow: hidden;
@@ -577,22 +668,11 @@ body {
     gap: 18px;
     overflow-x: auto;
     padding-bottom: 14px;
-    scrollbar-width: thin;
-    scrollbar-color: var(--accent-green) rgba(68, 187, 145, 0.1);
+    scrollbar-width: none;
 }
 
 .content-slider::-webkit-scrollbar {
-    height: 8px;
-}
-
-.content-slider::-webkit-scrollbar-track {
-    background: rgba(68, 187, 145, 0.1);
-    border-radius: 4px;
-}
-
-.content-slider::-webkit-scrollbar-thumb {
-    background: var(--accent-green);
-    border-radius: 4px;
+    display: none;
 }
 
 .content-card {
