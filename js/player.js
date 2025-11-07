@@ -78,6 +78,14 @@ async function loadVideo(id, type) {
     const videoTitle = document.getElementById('videoTitle');
     const recommendedSlider = document.getElementById('recommendedSlider');
     
+    const moviePoster = document.getElementById('moviePoster');
+    const movieTitle = document.getElementById('movieTitle');
+    const movieYear = document.getElementById('movieYear');
+    const movieRating = document.getElementById('movieRating');
+    const movieDescription = document.getElementById('movieDescription');
+    const movieGenres = document.getElementById('movieGenres');
+    const movieCast = document.getElementById('movieCast');
+    
     try {
         let details;
         if (type === 'movie') {
@@ -93,9 +101,25 @@ async function loadVideo(id, type) {
             
             if (details) {
                 const title = details.title;
-                videoTitle.textContent = title;
+                const year = details.release_date ? details.release_date.substring(0, 4) : 'N/A';
+                const rating = details.vote_average ? `⭐ ${details.vote_average.toFixed(1)}` : 'N/A';
                 
-                // Load recommendations
+                videoTitle.textContent = title;
+                movieTitle.textContent = title;
+                movieYear.textContent = year;
+                movieRating.textContent = rating;
+                movieDescription.textContent = details.overview || 'No description available.';
+                moviePoster.src = getTMDBImageUrl(details.poster_path, 'w500');
+                
+                if (details.genres && details.genres.length > 0) {
+                    movieGenres.innerHTML = details.genres.map(g => 
+                        `<span class="genre-tag">${g.name}</span>`
+                    ).join('');
+                } else {
+                    movieGenres.innerHTML = '<span class="genre-tag">N/A</span>';
+                }
+                
+                await loadMovieCast(id);
                 await loadRecommendations(id, 'movie');
                 
                 addToWatchHistory({
@@ -118,9 +142,25 @@ async function loadVideo(id, type) {
             
             if (details) {
                 const title = details.name;
-                videoTitle.textContent = title;
+                const year = details.first_air_date ? details.first_air_date.substring(0, 4) : 'N/A';
+                const rating = details.vote_average ? `⭐ ${details.vote_average.toFixed(1)}` : 'N/A';
                 
-                // Load recommendations
+                videoTitle.textContent = title;
+                movieTitle.textContent = title;
+                movieYear.textContent = year;
+                movieRating.textContent = rating;
+                movieDescription.textContent = details.overview || 'No description available.';
+                moviePoster.src = getTMDBImageUrl(details.poster_path, 'w500');
+                
+                if (details.genres && details.genres.length > 0) {
+                    movieGenres.innerHTML = details.genres.map(g => 
+                        `<span class="genre-tag">${g.name}</span>`
+                    ).join('');
+                } else {
+                    movieGenres.innerHTML = '<span class="genre-tag">N/A</span>';
+                }
+                
+                await loadMovieCast(id, 'tv');
                 await loadRecommendations(id, 'tv');
                 
                 addToWatchHistory({
@@ -141,6 +181,10 @@ async function loadVideo(id, type) {
                 scrolling="no"></iframe>`;
             
             videoTitle.textContent = 'Anime Player';
+            movieTitle.textContent = 'Anime Player';
+            movieDescription.textContent = 'Loading anime content...';
+            movieGenres.innerHTML = '<span class="genre-tag">Anime</span>';
+            movieCast.innerHTML = '<div class="loading">Cast information not available</div>';
             if (recommendedSlider) {
                 recommendedSlider.innerHTML = '<div class="loading">Recommendations not available</div>';
             }
@@ -148,6 +192,32 @@ async function loadVideo(id, type) {
     } catch (error) {
         console.error('Error loading video:', error);
         videoWrapper.innerHTML = '<div class="loading">Failed to load video. Please try again later.</div>';
+    }
+}
+
+async function loadMovieCast(id, type = 'movie') {
+    const movieCast = document.getElementById('movieCast');
+    
+    try {
+        const endpoint = type === 'movie' ? `/movie/${id}/credits` : `/tv/${id}/credits`;
+        const data = await fetchTMDB(endpoint);
+        
+        if (data && data.cast && data.cast.length > 0) {
+            const topCast = data.cast.slice(0, 6);
+            movieCast.innerHTML = topCast.map(member => `
+                <div class="cast-item">
+                    <div class="cast-photo">
+                        <img src="${member.profile_path ? getTMDBImageUrl(member.profile_path, 'w185') : 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="45" height="45"%3E%3Crect fill="%231f1f1f" width="45" height="45"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="12" fill="%23666"%3E?%3C/text%3E%3C/svg%3E'}" alt="${member.name}">
+                    </div>
+                    <div class="cast-name">${member.name}</div>
+                </div>
+            `).join('');
+        } else {
+            movieCast.innerHTML = '<div class="loading">No cast information available</div>';
+        }
+    } catch (error) {
+        console.error('Error loading cast:', error);
+        movieCast.innerHTML = '<div class="loading">Failed to load cast</div>';
     }
 }
 

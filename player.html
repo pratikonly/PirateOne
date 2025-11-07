@@ -136,13 +136,35 @@
             </div>
 
             <div class="right-sidebar">
-                <div class="sidebar-box right-upper-box">
-                    <div class="website-branding">
-                        <span class="website-name"><span style="font-size: 130%;">C</span>ine<span style="font-size: 130%;">V</span>erse</span>
+                <div class="movie-info-container">
+                    <div class="movie-header">
+                        <div class="movie-poster-small">
+                            <img id="moviePoster" src="" alt="Movie Poster">
+                        </div>
+                        <div class="movie-header-details">
+                            <h2 id="movieTitle">Loading...</h2>
+                            <div class="movie-meta-info">
+                                <span id="movieYear"></span>
+                                <span id="movieRating"></span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="made-by">
-                        <img src="https://raw.githubusercontent.com/pratik11500/PratikPortfolio/refs/heads/replit-agent/assets/images/logo.png" alt="Logo" class="brand-logo">
-                        <span class="brand-text">Made by <span class="brand-name">Pratik</span></span>
+                    
+                    <div class="movie-description">
+                        <h3>Description</h3>
+                        <p id="movieDescription">Loading description...</p>
+                    </div>
+                    
+                    <div class="movie-genres">
+                        <h3>Genres</h3>
+                        <div class="genres-tags" id="movieGenres"></div>
+                    </div>
+                    
+                    <div class="movie-cast">
+                        <h3>Cast</h3>
+                        <div class="cast-grid" id="movieCast">
+                            <div class="loading">Loading cast...</div>
+                        </div>
                     </div>
                 </div>
             </div>
