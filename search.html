@@ -101,16 +101,19 @@
                     <button class="register-btn" onclick="window.location.href='register.html'">Register</button>
                 </div>
                 <div class="user-menu" id="userMenu" style="display: none;">
-                    <div class="account-circle">
+                    <div class="account-circle" id="accountCircle">
                         <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
                         </svg>
                     </div>
-                    <div class="dropdown">
-                        <a href="profile.html">Profile</a>
-                        <a href="settings.html">Settings</a>
-                        <a href="#" id="logoutBtn">Logout</a>
-                    </div>
+                </div>
+                <div class="modal-backdrop" id="modalBackdrop"></div>
+                <div class="dropdown" id="userDropdown">
+                    <button class="dropdown-close" id="closeDropdown">&times;</button>
+                    <div class="dropdown-header">Account</div>
+                    <a href="profile.html">Profile</a>
+                    <a href="settings.html">Settings</a>
+                    <a href="#" id="logoutBtn">Logout</a>
                 </div>
             </div>
         </div>
@@ -149,6 +152,33 @@
     <script src="js/api.js"></script>
     <script src="js/search.js"></script>
     <script>
+        // Profile modal
+        const accountCircle = document.getElementById('accountCircle');
+        const modalBackdrop = document.getElementById('modalBackdrop');
+        const userDropdown = document.getElementById('userDropdown');
+        const closeDropdown = document.getElementById('closeDropdown');
+
+        if (accountCircle) {
+            accountCircle.addEventListener('click', () => {
+                modalBackdrop.classList.add('active');
+                userDropdown.classList.add('active');
+            });
+        }
+
+        if (closeDropdown) {
+            closeDropdown.addEventListener('click', () => {
+                modalBackdrop.classList.remove('active');
+                userDropdown.classList.remove('active');
+            });
+        }
+
+        if (modalBackdrop) {
+            modalBackdrop.addEventListener('click', () => {
+                modalBackdrop.classList.remove('active');
+                userDropdown.classList.remove('active');
+            });
+        }
+
         document.getElementById('quickSearch').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 const query = this.value.trim();
