@@ -37,13 +37,12 @@ document.addEventListener('DOMContentLoaded', async function() {
     const addToWatchlistBtn = document.getElementById('addToWatchlistBtn');
     addToWatchlistBtn?.addEventListener('click', function() {
         const title = document.getElementById('videoTitle').textContent;
-        const poster = document.getElementById('sidebarPoster').src;
         
         addToWatchlist({
             id: id,
             type: type,
             title: title,
-            poster: poster
+            poster: ''
         });
         
         addToWatchlistBtn.classList.add('added');
@@ -77,13 +76,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 async function loadVideo(id, type) {
     const videoWrapper = document.getElementById('videoWrapper');
     const videoTitle = document.getElementById('videoTitle');
-    const sidebarTitle = document.getElementById('sidebarTitle');
-    const sidebarYear = document.getElementById('sidebarYear');
-    const sidebarRating = document.getElementById('sidebarRating');
-    const sidebarOverview = document.getElementById('sidebarOverview');
-    const sidebarGenres = document.getElementById('sidebarGenres');
-    const sidebarPoster = document.getElementById('sidebarPoster');
-    const sidebarCast = document.getElementById('sidebarCast');
     const recommendedSlider = document.getElementById('recommendedSlider');
     
     try {
@@ -101,27 +93,7 @@ async function loadVideo(id, type) {
             
             if (details) {
                 const title = details.title;
-                const year = details.release_date ? details.release_date.substring(0, 4) : '';
-                const rating = details.vote_average ? `⭐ ${details.vote_average.toFixed(1)}` : '';
-                
                 videoTitle.textContent = title;
-                sidebarTitle.textContent = title;
-                sidebarYear.textContent = year;
-                sidebarRating.textContent = rating;
-                sidebarOverview.textContent = details.overview || 'No description available.';
-                sidebarPoster.src = getTMDBImageUrl(details.poster_path, 'w500');
-                
-                // Load genres
-                if (details.genres && details.genres.length > 0) {
-                    sidebarGenres.innerHTML = details.genres.map(g => 
-                        `<span class="genre-tag">${g.name}</span>`
-                    ).join('');
-                } else {
-                    sidebarGenres.innerHTML = '<span class="genre-tag">N/A</span>';
-                }
-                
-                // Load cast
-                await loadCast(id, 'movie');
                 
                 // Load recommendations
                 await loadRecommendations(id, 'movie');
@@ -146,27 +118,7 @@ async function loadVideo(id, type) {
             
             if (details) {
                 const title = details.name;
-                const year = details.first_air_date ? details.first_air_date.substring(0, 4) : '';
-                const rating = details.vote_average ? `⭐ ${details.vote_average.toFixed(1)}` : '';
-                
                 videoTitle.textContent = title;
-                sidebarTitle.textContent = title;
-                sidebarYear.textContent = year;
-                sidebarRating.textContent = rating;
-                sidebarOverview.textContent = details.overview || 'No description available.';
-                sidebarPoster.src = getTMDBImageUrl(details.poster_path, 'w500');
-                
-                // Load genres
-                if (details.genres && details.genres.length > 0) {
-                    sidebarGenres.innerHTML = details.genres.map(g => 
-                        `<span class="genre-tag">${g.name}</span>`
-                    ).join('');
-                } else {
-                    sidebarGenres.innerHTML = '<span class="genre-tag">N/A</span>';
-                }
-                
-                // Load cast
-                await loadCast(id, 'tv');
                 
                 // Load recommendations
                 await loadRecommendations(id, 'tv');
@@ -189,11 +141,9 @@ async function loadVideo(id, type) {
                 scrolling="no"></iframe>`;
             
             videoTitle.textContent = 'Anime Player';
-            sidebarTitle.textContent = 'Anime Player';
-            sidebarOverview.textContent = 'Loading anime content...';
-            sidebarGenres.innerHTML = '<span class="genre-tag">Anime</span>';
-            sidebarCast.innerHTML = '<div class="loading">Cast information not available for anime</div>';
-            recommendedSlider.innerHTML = '<div class="loading">Recommendations not available</div>';
+            if (recommendedSlider) {
+                recommendedSlider.innerHTML = '<div class="loading">Recommendations not available</div>';
+            }
         }
     } catch (error) {
         console.error('Error loading video:', error);

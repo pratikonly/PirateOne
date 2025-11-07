@@ -38,7 +38,7 @@ body {
     position: fixed;
     right: 0;
     top: 0;
-    width: var(--sidebar-width);
+    width: 280px;
     height: 100vh;
     background: var(--bg-black);
     padding: 16px 12px;
@@ -47,6 +47,12 @@ body {
     flex-direction: column;
     gap: 8px;
     overflow-y: auto;
+}
+
+.right-upper-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .left-sidebar::-webkit-scrollbar,
@@ -1004,7 +1010,7 @@ body {
 
 .player-page .main-container {
     margin-left: var(--sidebar-width);
-    margin-right: var(--sidebar-width);
+    margin-right: 280px;
 }
 
 .toggle-info-btn {
@@ -1398,6 +1404,10 @@ body {
     .player-page .main-container {
         margin-left: 70px;
         margin-right: 70px;
+    }
+    
+    .player-page .right-sidebar {
+        width: 70px;
     }
     
     .top-bar {
