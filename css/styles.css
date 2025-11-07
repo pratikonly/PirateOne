@@ -1072,7 +1072,7 @@ body {
 }
 
 .recommended-section .content-slider {
-    max-width: 100%;
+    max-width: 20%;
     overflow-x: auto;
     overflow-y: hidden;
     display: flex;
