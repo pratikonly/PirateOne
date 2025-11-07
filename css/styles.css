@@ -49,10 +49,14 @@ body {
 .movie-info-container {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 8px;
 }
 
 .movie-header {
+    background: rgba(68, 187, 145, 0.05);
+    border: 1px solid rgba(68, 187, 145, 0.2);
+    border-radius: 12px;
+    padding: 14px;
     display: flex;
     gap: 12px;
     align-items: flex-start;
