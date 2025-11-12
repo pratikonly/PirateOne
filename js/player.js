@@ -35,7 +35,14 @@ document.addEventListener('DOMContentLoaded', async function() {
         seasonSelector.addEventListener('change', async function() {
             const selectedSeason = parseInt(this.value);
             if (!Number.isNaN(selectedSeason) && selectedSeason !== null && currentTvContext.tvId) {
-                await loadEpisodes(currentTvContext.tvId, selectedSeason);
+                const urlParams = new URLSearchParams(window.location.search);
+                const type = urlParams.get('type');
+
+                if (type === 'anime') {
+                    await loadAnimeEpisodes(currentTvContext.tvId, selectedSeason);
+                } else {
+                    await loadEpisodes(currentTvContext.tvId, selectedSeason);
+                }
             }
         });
     }
@@ -50,10 +57,20 @@ document.addEventListener('DOMContentLoaded', async function() {
                 const episodeName = episodeItem.dataset.name;
                 const runtime = episodeItem.dataset.runtime;
 
-                await playEpisode(currentTvContext.tvId, seasonNum, episodeNum, {
-                    name: episodeName,
-                    runtime: runtime
-                });
+                const urlParams = new URLSearchParams(window.location.search);
+                const type = urlParams.get('type');
+
+                if (type === 'anime') {
+                    await playAnimeEpisode(currentTvContext.tvId, seasonNum, episodeNum, {
+                        name: episodeName,
+                        runtime: runtime
+                    });
+                } else {
+                    await playEpisode(currentTvContext.tvId, seasonNum, episodeNum, {
+                        name: episodeName,
+                        runtime: runtime
+                    });
+                }
             }
         });
     }
@@ -239,23 +256,96 @@ async function loadVideo(id, type, defaults = {}) {
                 }
             }
         } else if (type === 'anime') {
-            const embedUrl = getVideasyEmbedUrl(id, 'anime');
-            videoWrapper.innerHTML = `<iframe 
-                src="${embedUrl}" 
-                frameborder="0" 
-                allowfullscreen 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerpolicy="origin"
-                scrolling="no"
-                style="border: none;"></iframe>`;
+            try {
+                // Get anime details from AniList
+                details = await getAnimeDetails(id);
+                console.log('Anime details from AniList:', details);
 
-            videoTitle.textContent = 'Anime Player';
-            movieTitle.textContent = 'Anime Player';
-            movieDescription.textContent = 'Enjoy your anime!';
-            movieGenres.innerHTML = '<span class="genre-tag">Anime</span>';
-            movieCast.innerHTML = '<div class="loading">Cast information not available</div>';
-            if (recommendedSlider) {
-                recommendedSlider.innerHTML = '<div class="loading">Recommendations not available</div>';
+                if (details) {
+                    const title = details.title.english || details.title.romaji || 'Unknown Anime';
+                    const year = details.seasonYear || 'N/A';
+                    const rating = details.averageScore ? `⭐ ${(details.averageScore / 10).toFixed(1)}` : 'N/A';
+
+                    videoTitle.textContent = title;
+                    movieTitle.textContent = title;
+                    movieYear.textContent = year;
+                    movieRating.textContent = rating;
+
+                    // Strip HTML tags from description
+                    const description = details.description ? details.description.replace(/<[^>]*>/g, '') : 'No description available.';
+                    movieDescription.textContent = description;
+
+                    if (details.coverImage && details.coverImage.extraLarge) {
+                        moviePoster.src = details.coverImage.extraLarge;
+                    } else if (details.coverImage && details.coverImage.large) {
+                        moviePoster.src = details.coverImage.large;
+                    } else {
+                        moviePoster.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="150"%3E%3Crect fill="%231f1f1f" width="100" height="150"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="14" fill="%23666"%3ENo Image%3C/text%3E%3C/svg%3E';
+                    }
+
+                    if (details.genres && details.genres.length > 0) {
+                        movieGenres.innerHTML = details.genres.map(g => 
+                            `<span class="genre-tag">${g}</span>`
+                        ).join('');
+                    } else {
+                        movieGenres.innerHTML = '<span class="genre-tag">Anime</span>';
+                    }
+
+                    // Load AniList characters
+                    await loadAnimeCharacters(details);
+
+                    // Load AniList recommendations
+                    await loadAnimeRecommendations(details);
+
+                    // Initialize anime playback with episodes
+                    const episodeCount = details.episodes || 12;
+                    const mockDetails = {
+                        id: id,
+                        name: title,
+                        seasons: [
+                            { season_number: 1, episode_count: episodeCount, name: 'Season 1' }
+                        ]
+                    };
+
+                    await initAnimePlayback(id, mockDetails, defaults);
+
+                    addToWatchHistory({
+                        id: details.id,
+                        type: 'anime',
+                        title: title,
+                        poster: details.coverImage ? details.coverImage.large : ''
+                    });
+                } else {
+                    throw new Error('No anime details found');
+                }
+            } catch (apiError) {
+                console.warn('Could not load anime details from AniList:', apiError);
+
+                // Set basic info
+                videoTitle.textContent = 'Anime Player';
+                movieTitle.textContent = 'Anime Player';
+                movieYear.textContent = 'N/A';
+                movieRating.textContent = 'N/A';
+                movieDescription.textContent = 'Enjoy your anime!';
+                movieGenres.innerHTML = '<span class="genre-tag">Anime</span>';
+                movieCast.innerHTML = '<div class="loading">Character information not available</div>';
+                moviePoster.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="150"%3E%3Crect fill="%231f1f1f" width="100" height="150"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="14" fill="%23666"%3EAnime%3C/text%3E%3C/svg%3E';
+
+                if (recommendedSlider) {
+                    recommendedSlider.innerHTML = '<div class="loading">Recommendations not available</div>';
+                }
+
+                // Create a mock details object with default episodes for anime
+                const mockDetails = {
+                    id: id,
+                    name: 'Anime',
+                    seasons: [
+                        { season_number: 1, episode_count: 12, name: 'Season 1' }
+                    ]
+                };
+
+                // Initialize anime playback with mock data
+                await initAnimePlayback(id, mockDetails, defaults);
             }
         }
     } catch (error) {
@@ -316,6 +406,54 @@ async function loadCast(id, type) {
     } catch (error) {
         console.error('Error loading cast:', error);
         sidebarCast.innerHTML = '<div class="loading">Failed to load cast</div>';
+    }
+}
+
+async function loadAnimeCharacters(animeDetails) {
+    const movieCast = document.getElementById('movieCast');
+
+    try {
+        if (animeDetails.characters && animeDetails.characters.edges && animeDetails.characters.edges.length > 0) {
+            const characters = animeDetails.characters.edges.slice(0, 6);
+            movieCast.innerHTML = characters.map(edge => {
+                const character = edge.node;
+                const imageUrl = character.image && character.image.large ? character.image.large : 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="45" height="45"%3E%3Crect fill="%231f1f1f" width="45" height="45"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="12" fill="%23666"%3E?%3C/text%3E%3C/svg%3E';
+                return `
+                    <div class="cast-item">
+                        <div class="cast-photo">
+                            <img src="${imageUrl}" alt="${character.name.full}">
+                        </div>
+                        <div class="cast-name">${character.name.full}</div>
+                    </div>
+                `;
+            }).join('');
+        } else {
+            movieCast.innerHTML = '<div class="loading">No character information available</div>';
+        }
+    } catch (error) {
+        console.error('Error loading anime characters:', error);
+        movieCast.innerHTML = '<div class="loading">Failed to load characters</div>';
+    }
+}
+
+async function loadAnimeRecommendations(animeDetails) {
+    const recommendedSlider = document.getElementById('recommendedSlider');
+
+    try {
+        if (animeDetails.recommendations && animeDetails.recommendations.nodes && animeDetails.recommendations.nodes.length > 0) {
+            recommendedSlider.innerHTML = '';
+            animeDetails.recommendations.nodes.forEach(node => {
+                if (node.mediaRecommendation) {
+                    const anime = node.mediaRecommendation;
+                    recommendedSlider.appendChild(createContentCard(anime, 'anime'));
+                }
+            });
+        } else {
+            recommendedSlider.innerHTML = '<div class="loading">No recommendations available</div>';
+        }
+    } catch (error) {
+        console.error('Error loading anime recommendations:', error);
+        recommendedSlider.innerHTML = '<div class="loading">Failed to load recommendations</div>';
     }
 }
 
@@ -453,11 +591,6 @@ async function loadEpisodes(tvId, seasonNumber, defaultEpisode = null) {
 
         episodesList.innerHTML = seasonData.episodes.map(episode => {
             const runtime = episode.runtime ? `${episode.runtime}min` : 'N/A';
-            const airDate = episode.air_date ? new Date(episode.air_date).toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric', 
-                year: 'numeric' 
-            }) : '';
 
             return `
                 <div class="episode-item" 
@@ -475,7 +608,6 @@ async function loadEpisodes(tvId, seasonNumber, defaultEpisode = null) {
                                 </svg>
                                 ${runtime}
                             </span>
-                            ${airDate ? `<span>• ${airDate}</span>` : ''}
                         </div>
                     </div>
                 </div>
@@ -498,13 +630,181 @@ async function loadEpisodes(tvId, seasonNumber, defaultEpisode = null) {
     }
 }
 
-async function playEpisode(tvId, seasonNumber, episodeNumber, episodeData = {}) {
+async function initAnimePlayback(animeId, details, defaults = {}) {
+    if (!details || !details.seasons || !episodesContainer) {
+        return;
+    }
+
+    currentTvContext.tvId = animeId;
+    currentTvContext.seasons = details.seasons.filter(s => s.season_number >= 0 && s.episode_count > 0);
+
+    if (currentTvContext.seasons.length === 0) {
+        return;
+    }
+
+    episodesContainer.style.display = 'block';
+
+    seasonSelector.innerHTML = currentTvContext.seasons.map(season => 
+        `<option value="${season.season_number}">
+            Season ${season.season_number} (${season.episode_count} episodes)
+        </option>`
+    ).join('');
+
+    const defaultSeason = defaults.season !== null && defaults.season !== undefined ? defaults.season : currentTvContext.seasons[0].season_number;
+    seasonSelector.value = defaultSeason;
+    currentTvContext.seasonNumber = defaultSeason;
+
+    await loadAnimeEpisodes(animeId, defaultSeason, defaults.episode);
+}
+
+async function loadAnimeEpisodes(animeId, seasonNumber, defaultEpisode = null) {
+    if (!episodesList) return;
+
+    episodesList.innerHTML = '<div class="loading">Loading episodes...</div>';
+
+    try {
+        const seasonData = await getTVSeasonDetails(animeId, seasonNumber);
+
+        if (!seasonData || !seasonData.episodes || seasonData.episodes.length === 0) {
+            // If TMDB fails, create default episodes (typical anime has 12-24 episodes per season)
+            console.warn('TMDB episode data unavailable, using default episode list');
+            const defaultEpisodeCount = 12;
+            const mockEpisodes = [];
+
+            for (let i = 1; i <= defaultEpisodeCount; i++) {
+                mockEpisodes.push({
+                    episode_number: i,
+                    name: `Episode ${i}`,
+                    runtime: 24
+                });
+            }
+
+            currentTvContext.seasonNumber = seasonNumber;
+            currentTvContext.seasonDetails = { episodes: mockEpisodes };
+
+            episodesList.innerHTML = mockEpisodes.map(episode => {
+                const runtime = episode.runtime ? `${episode.runtime}min` : '24min';
+
+                return `
+                    <div class="episode-item" 
+                         data-season="${seasonNumber}" 
+                         data-episode="${episode.episode_number}"
+                         data-name="${episode.name}"
+                         data-runtime="${runtime}">
+                        <div class="episode-number">E${episode.episode_number}</div>
+                        <div class="episode-details">
+                            <div class="episode-name">${episode.name}</div>
+                            <div class="episode-meta">
+                                <span class="episode-duration">
+                                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                                    </svg>
+                                    ${runtime}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            const episodeToPlay = defaultEpisode || 1;
+            await playAnimeEpisode(animeId, seasonNumber, episodeToPlay, {
+                name: `Episode ${episodeToPlay}`,
+                runtime: '24min'
+            });
+            return;
+        }
+
+        currentTvContext.seasonNumber = seasonNumber;
+        currentTvContext.seasonDetails = seasonData;
+
+        episodesList.innerHTML = seasonData.episodes.map(episode => {
+            const runtime = episode.runtime ? `${episode.runtime}min` : '24min';
+
+            return `
+                <div class="episode-item" 
+                     data-season="${seasonNumber}" 
+                     data-episode="${episode.episode_number}"
+                     data-name="${episode.name || 'Episode ' + episode.episode_number}"
+                     data-runtime="${runtime}">
+                    <div class="episode-number">E${episode.episode_number}</div>
+                    <div class="episode-details">
+                        <div class="episode-name">${episode.name || 'Episode ' + episode.episode_number}</div>
+                        <div class="episode-meta">
+                            <span class="episode-duration">
+                                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                                </svg>
+                                ${runtime}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        const episodeToPlay = defaultEpisode || 1;
+        const firstEpisode = seasonData.episodes.find(e => e.episode_number === episodeToPlay) || seasonData.episodes[0];
+
+        if (firstEpisode) {
+            await playAnimeEpisode(animeId, seasonNumber, firstEpisode.episode_number, {
+                name: firstEpisode.name,
+                runtime: firstEpisode.runtime
+            });
+        }
+
+    } catch (error) {
+        console.error('Error loading anime episodes:', error);
+        // Fallback to default episodes
+        const defaultEpisodeCount = 12;
+        const mockEpisodes = [];
+
+        for (let i = 1; i <= defaultEpisodeCount; i++) {
+            mockEpisodes.push({
+                episode_number: i,
+                name: `Episode ${i}`,
+                runtime: 24
+            });
+        }
+
+        episodesList.innerHTML = mockEpisodes.map(episode => {
+            return `
+                <div class="episode-item" 
+                     data-season="${seasonNumber}" 
+                     data-episode="${episode.episode_number}"
+                     data-name="${episode.name}"
+                     data-runtime="24min">
+                    <div class="episode-number">E${episode.episode_number}</div>
+                    <div class="episode-details">
+                        <div class="episode-name">${episode.name}</div>
+                        <div class="episode-meta">
+                            <span class="episode-duration">
+                                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                                </svg>
+                                24min
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        const episodeToPlay = defaultEpisode || 1;
+        await playAnimeEpisode(animeId, seasonNumber, episodeToPlay, {
+            name: `Episode ${episodeToPlay}`,
+            runtime: '24min'
+        });
+    }
+}
+
+async function playAnimeEpisode(animeId, seasonNumber, episodeNumber, episodeData = {}) {
     const videoWrapper = document.getElementById('videoWrapper');
     const videoTitle = document.getElementById('videoTitle');
 
     if (!videoWrapper || !videoTitle) return;
 
-    const embedUrl = getVideasyEmbedUrl(tvId, 'tv', seasonNumber, episodeNumber);
+    const embedUrl = getVideasyEmbedUrl(animeId, 'anime', seasonNumber, episodeNumber);
 
     videoWrapper.innerHTML = `<iframe 
         src="${embedUrl}" 
@@ -515,7 +815,52 @@ async function playEpisode(tvId, seasonNumber, episodeNumber, episodeData = {}) 
         scrolling="no"
         style="border: none;"></iframe>`;
 
-    const showTitle = document.getElementById('movieTitle')?.textContent || 'TV Show';
+    const showTitle = document.getElementById('movieTitle')?.textContent || 'Anime';
+    const episodeName = episodeData.name || `Episode ${episodeNumber}`;
+    videoTitle.textContent = `${showTitle} — S${seasonNumber}E${episodeNumber}: ${episodeName}`;
+
+    document.querySelectorAll('.episode-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    const activeEpisode = episodesList.querySelector(`[data-season="${seasonNumber}"][data-episode="${episodeNumber}"]`);
+    if (activeEpisode) {
+        activeEpisode.classList.add('active');
+        activeEpisode.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    currentTvContext.episodeNumber = episodeNumber;
+
+    const url = new URL(window.location);
+    url.searchParams.set('season', seasonNumber);
+    url.searchParams.set('episode', episodeNumber);
+    window.history.replaceState({}, '', url);
+}
+
+async function playEpisode(tvId, seasonNumber, episodeNumber, episodeData = {}) {
+    const videoWrapper = document.getElementById('videoWrapper');
+    const videoTitle = document.getElementById('videoTitle');
+
+    if (!videoWrapper || !videoTitle) return;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const type = urlParams.get('type');
+
+    // Use appropriate embed URL based on content type
+    const embedUrl = type === 'anime' 
+        ? getVideasyEmbedUrl(tvId, 'anime', seasonNumber, episodeNumber)
+        : getVideasyEmbedUrl(tvId, 'tv', seasonNumber, episodeNumber);
+
+    videoWrapper.innerHTML = `<iframe 
+        src="${embedUrl}" 
+        frameborder="0" 
+        allowfullscreen 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="origin"
+        scrolling="no"
+        style="border: none;"></iframe>`;
+
+    const showTitle = document.getElementById('movieTitle')?.textContent || (type === 'anime' ? 'Anime' : 'TV Show');
     const episodeName = episodeData.name || `Episode ${episodeNumber}`;
     videoTitle.textContent = `${showTitle} — S${seasonNumber}E${episodeNumber}: ${episodeName}`;
 

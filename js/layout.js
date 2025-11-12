@@ -5,7 +5,7 @@ function updateUserAvatar() {
         const avatarLarge = document.getElementById('userAvatarLarge');
         const defaultSmall = document.getElementById('defaultAvatarSmall');
         const defaultLarge = document.getElementById('defaultAvatarLarge');
-        
+
         if (avatarSmall) {
             avatarSmall.src = user.avatar;
             avatarSmall.style.display = 'block';
@@ -40,7 +40,7 @@ function ensureAvatarElements() {
             accountCircle.insertBefore(avatarImg, existingSvg);
         }
     }
-    
+
     const avatarLargeContainer = document.querySelector('.profile-avatar-large');
     if (avatarLargeContainer && !document.getElementById('userAvatarLarge')) {
         const existingSvg = avatarLargeContainer.querySelector('svg');
@@ -76,7 +76,7 @@ function initializeLayout() {
     ensureAvatarElements();
     ensureClickableBranding();
     updateBrandingLink();
-    
+
     const user = getCurrentUser();
     if (user) {
         updateUserAvatar();

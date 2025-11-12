@@ -2,15 +2,15 @@
 function initSearchSuggestions(inputId, suggestionsId) {
     const searchInput = document.getElementById(inputId);
     const searchSuggestions = document.getElementById(suggestionsId);
-    
+
     if (!searchInput || !searchSuggestions) return;
-    
+
     let searchTimeout;
 
     searchInput.addEventListener('input', function(e) {
         clearTimeout(searchTimeout);
         const query = this.value.trim();
-        
+
         if (query.length < 2) {
             searchSuggestions.classList.remove('active');
             return;
@@ -47,7 +47,7 @@ async function showSearchSuggestions(query, suggestionsElement) {
         ]);
 
         let suggestions = [];
-        
+
         if (movies && movies.results) {
             suggestions = suggestions.concat(movies.results.slice(0, 3).map(item => ({...item, type: 'movie'})));
         }
@@ -64,7 +64,7 @@ async function showSearchSuggestions(query, suggestionsElement) {
                 const title = item.type === 'anime' ? formatAnimeTitle(item) : (item.title || item.name);
                 const year = item.release_date ? item.release_date.substring(0, 4) : (item.first_air_date ? item.first_air_date.substring(0, 4) : '');
                 const typeLabel = item.type === 'movie' ? 'Movie' : item.type === 'tv' ? 'TV Show' : 'Anime';
-                
+
                 return `
                     <div class="search-suggestion-item" onclick="window.location.href='player.html?id=${item.id}&type=${item.type}'">
                         <img src="${poster}" alt="${title}" class="search-suggestion-poster" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2750%27 height=%2775%27%3E%3Crect fill=%27%231f1f1f%27 width=%2750%27 height=%2775%27/%3E%3C/svg%3E'">

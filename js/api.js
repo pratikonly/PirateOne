@@ -198,6 +198,83 @@ async function searchAnime(query) {
     return data ? data.Page.media : [];
 }
 
+async function getAnimeDetails(anilistId) {
+    const query = `
+    query ($id: Int) {
+        Media(id: $id, type: ANIME) {
+            id
+            title {
+                english
+                romaji
+                native
+            }
+            description
+            coverImage {
+                extraLarge
+                large
+            }
+            bannerImage
+            averageScore
+            meanScore
+            popularity
+            favourites
+            genres
+            episodes
+            duration
+            status
+            format
+            season
+            seasonYear
+            studios {
+                nodes {
+                    name
+                }
+            }
+            characters(perPage: 6, sort: ROLE) {
+                edges {
+                    role
+                    node {
+                        name {
+                            full
+                        }
+                        image {
+                            large
+                        }
+                    }
+                    voiceActors(language: JAPANESE, sort: RELEVANCE) {
+                        name {
+                            full
+                        }
+                        image {
+                            large
+                        }
+                    }
+                }
+            }
+            recommendations(perPage: 10, sort: RATING_DESC) {
+                nodes {
+                    mediaRecommendation {
+                        id
+                        title {
+                            english
+                            romaji
+                        }
+                        coverImage {
+                            large
+                        }
+                        averageScore
+                        format
+                        episodes
+                    }
+                }
+            }
+        }
+    }`;
+
+    const data = await fetchAniList(query, { id: parseInt(anilistId) });
+    return data ? data.Media : null;
+}
+
 function getVideasyEmbedUrl(tmdbId, type = 'movie', season = null, episode = null) {
     // Videasy.net player URL format:
     // Movies: https://player.videasy.net/movie/{tmdb_id}

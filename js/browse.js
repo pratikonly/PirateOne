@@ -3,9 +3,9 @@ async function loadMovies(filter, page) {
     const pageInfo = document.getElementById('pageInfo');
     const prevBtn = document.getElementById('prevPage');
     const nextBtn = document.getElementById('nextPage');
-    
+
     grid.innerHTML = '<div class="loading">Loading movies...</div>';
-    
+
     let data;
     switch(filter) {
         case 'popular':
@@ -23,13 +23,13 @@ async function loadMovies(filter, page) {
         default:
             data = await getPopularMovies(page);
     }
-    
+
     if (data && data.results) {
         grid.innerHTML = '';
         data.results.forEach(movie => {
             grid.appendChild(createContentCard(movie, 'movie'));
         });
-        
+
         pageInfo.textContent = `Page ${page}`;
         prevBtn.disabled = page === 1;
         nextBtn.disabled = page >= data.total_pages;
@@ -43,9 +43,9 @@ async function loadTVShows(filter, page) {
     const pageInfo = document.getElementById('pageInfo');
     const prevBtn = document.getElementById('prevPage');
     const nextBtn = document.getElementById('nextPage');
-    
+
     grid.innerHTML = '<div class="loading">Loading TV shows...</div>';
-    
+
     let data;
     switch(filter) {
         case 'popular':
@@ -63,13 +63,13 @@ async function loadTVShows(filter, page) {
         default:
             data = await getPopularTVShows(page);
     }
-    
+
     if (data && data.results) {
         grid.innerHTML = '';
         data.results.forEach(show => {
             grid.appendChild(createContentCard(show, 'tv'));
         });
-        
+
         pageInfo.textContent = `Page ${page}`;
         prevBtn.disabled = page === 1;
         nextBtn.disabled = page >= data.total_pages;
@@ -83,9 +83,9 @@ async function loadAnime(filter, page) {
     const pageInfo = document.getElementById('pageInfo');
     const prevBtn = document.getElementById('prevPage');
     const nextBtn = document.getElementById('nextPage');
-    
+
     grid.innerHTML = '<div class="loading">Loading anime...</div>';
-    
+
     let data;
     switch(filter) {
         case 'trending':
@@ -100,13 +100,13 @@ async function loadAnime(filter, page) {
         default:
             data = await getTrendingAnime();
     }
-    
+
     if (data && data.length > 0) {
         grid.innerHTML = '';
         data.forEach(anime => {
             grid.appendChild(createContentCard(anime, 'anime'));
         });
-        
+
         pageInfo.textContent = `Page ${page}`;
         prevBtn.disabled = page === 1;
         nextBtn.disabled = false;

@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (window.location.pathname.includes('login.html') || window.location.pathname.includes('register.html')) {
         return;
     }
-    
+
     const user = getCurrentUser();
     if (user) {
         const userActions = document.getElementById('userActions');
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (userActions) userActions.style.display = 'none';
         if (userMenu) userMenu.style.display = 'block';
     }
-    
+
     window.addEventListener('scroll', function() {
         const navbar = document.querySelector('.navbar');
         if (navbar) {
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
     });
-    
+
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', function(e) {
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             window.location.href = 'login.html';
         });
     }
-    
+
     if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
         await loadHomepage();
     }
@@ -47,13 +47,13 @@ async function loadHomepage() {
             slideshowMovies = trendingMovies.results.slice(0, 5);
             initializeSlideshow();
         }
-        
+
         await Promise.all([
             loadContentRow('trendingMovies', getTrendingMovies(), 'movie'),
             loadContentRow('popularTV', getPopularTVShows(), 'tv'),
             loadContentRow('trendingAnime', getTrendingAnime(), 'anime')
         ]);
-        
+
     } catch (error) {
         console.error('Error loading homepage:', error);
     }
@@ -61,22 +61,22 @@ async function loadHomepage() {
 
 function initializeSlideshow() {
     const container = document.getElementById('slideshowContainer');
-    
+
     if (!container) return;
-    
+
     container.innerHTML = '';
-    
+
     slideshowMovies.forEach((movie, index) => {
         const slide = createSlide(movie, index);
         container.appendChild(slide);
     });
-    
+
     const prevBtn = document.getElementById('prevSlide');
     const nextBtn = document.getElementById('nextSlide');
-    
+
     if (prevBtn) prevBtn.addEventListener('click', previousSlide);
     if (nextBtn) nextBtn.addEventListener('click', nextSlide);
-    
+
     startAutoSlide();
 }
 
@@ -84,17 +84,17 @@ function createSlide(movie, index) {
     const slide = document.createElement('div');
     slide.className = index === 0 ? 'slide active' : 'slide';
     slide.dataset.index = index;
-    
+
     const backdropUrl = getTMDBImageUrl(movie.backdrop_path, 'original');
     slide.style.backgroundImage = `url('${backdropUrl}')`;
-    
+
     const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
     const year = movie.release_date ? movie.release_date.substring(0, 4) : '';
     const posterUrl = getTMDBImageUrl(movie.poster_path, 'w500');
-    
+
     const ratingColor = getRatingColor(movie.vote_average);
     slide.style.setProperty('--theme-color', ratingColor);
-    
+
     slide.innerHTML = `
         <div class="slide-overlay"></div>
         <div class="slide-content">
@@ -129,7 +129,7 @@ function createSlide(movie, index) {
             <img src="${posterUrl}" alt="${movie.title || movie.name}">
         </div>
     `;
-    
+
     return slide;
 }
 
@@ -144,18 +144,18 @@ function getRatingColor(rating) {
 
 function goToSlide(index) {
     const slides = document.querySelectorAll('.slide');
-    
+
     slides[currentSlide].classList.add('slide-exit');
     slides[currentSlide].classList.remove('active');
-    
+
     setTimeout(() => {
         slides[currentSlide].classList.remove('slide-exit');
     }, 800);
-    
+
     currentSlide = index;
-    
+
     slides[currentSlide].classList.add('active');
-    
+
     resetAutoSlide();
 }
 
@@ -185,7 +185,7 @@ function stopAutoSlide() {
 async function loadContentRow(elementId, dataPromise, type) {
     const container = document.getElementById(elementId);
     if (!container) return;
-    
+
     try {
         let data;
         if (type === 'anime') {
@@ -194,7 +194,7 @@ async function loadContentRow(elementId, dataPromise, type) {
             const response = await dataPromise;
             data = response ? response.results : [];
         }
-        
+
         if (data && data.length > 0) {
             container.innerHTML = '';
             data.slice(0, 20).forEach(item => {
@@ -211,7 +211,7 @@ async function loadContentRow(elementId, dataPromise, type) {
 
 function addToWatchlist(id, type, title, poster) {
     let watchlist = JSON.parse(localStorage.getItem('watchlist') || '[]');
-    
+
     const exists = watchlist.find(item => item.id === id && item.type === type);
     if (!exists) {
         watchlist.push({

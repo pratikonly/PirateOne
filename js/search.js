@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('quickSearch');
     const filterBtns = document.querySelectorAll('.filter-btn');
-    
+
     let currentType = 'all';
-    
+
     // Check for query parameter and auto-search
     const urlParams = new URLSearchParams(window.location.search);
     const query = urlParams.get('q');
@@ -11,35 +11,35 @@ document.addEventListener('DOMContentLoaded', function() {
         searchInput.value = query;
         performSearch();
     }
-    
+
     searchInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             performSearch();
         }
     });
-    
+
     filterBtns.forEach(btn => {
         btn.addEventListener('click', function() {
             filterBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             currentType = this.dataset.type;
-            
+
             if (searchInput.value.trim()) {
                 performSearch();
             }
         });
     });
-    
+
     async function performSearch() {
         const query = searchInput.value.trim();
         if (!query) return;
-        
+
         const resultsContainer = document.getElementById('searchResultsContainer');
         resultsContainer.innerHTML = '<div class="loading">Searching...</div>';
-        
+
         try {
             let allResults = [];
-            
+
             if (currentType === 'all' || currentType === 'movie') {
                 const movieData = await searchMovies(query);
                 if (movieData && movieData.results) {
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     );
                 }
             }
-            
+
             if (currentType === 'all' || currentType === 'tv') {
                 const tvData = await searchTVShows(query);
                 if (tvData && tvData.results) {
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     );
                 }
             }
-            
+
             if (currentType === 'all' || currentType === 'anime') {
                 const animeData = await searchAnime(query);
                 if (animeData && animeData.length > 0) {
@@ -66,11 +66,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     );
                 }
             }
-            
+
             if (allResults.length > 0) {
                 resultsContainer.innerHTML = '<div class="content-grid"></div>';
                 const grid = resultsContainer.querySelector('.content-grid');
-                
+
                 allResults.forEach(item => {
                     grid.appendChild(createContentCard(item, item.searchType));
                 });

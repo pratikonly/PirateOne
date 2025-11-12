@@ -1581,32 +1581,52 @@ body {
 
 .season-dropdown {
     width: 100%;
-    padding: 10px 14px;
-    background: rgba(68, 187, 145, 0.1);
+    padding: 12px 16px;
+    background: rgba(68, 187, 145, 0.08);
     border: 1px solid rgba(68, 187, 145, 0.3);
-    border-radius: 10px;
+    border-radius: 12px;
     color: var(--text-primary);
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 15px;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2344BB91' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
 }
 
 .season-dropdown:hover {
     background: rgba(68, 187, 145, 0.15);
     border-color: var(--accent-green);
+    box-shadow: 0 2px 8px rgba(68, 187, 145, 0.2);
 }
 
 .season-dropdown:focus {
     border-color: var(--accent-green);
-    box-shadow: 0 0 0 2px rgba(68, 187, 145, 0.2);
+    box-shadow: 0 0 0 3px rgba(68, 187, 145, 0.2);
+    background: rgba(68, 187, 145, 0.12);
 }
 
 .season-dropdown option {
-    background: var(--bg-black);
+    background: #1a1a1a;
     color: var(--text-primary);
-    padding: 10px;
+    padding: 12px 16px;
+    font-weight: 500;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(68, 187, 145, 0.1);
+}
+
+.season-dropdown option:hover {
+    background: rgba(68, 187, 145, 0.2);
+}
+
+.season-dropdown option:checked {
+    background: rgba(68, 187, 145, 0.3);
+    color: var(--accent-green);
+    font-weight: 600;
 }
 
 .episodes-list-wrapper h3 {
@@ -1689,8 +1709,8 @@ body {
 }
 
 .episode-name {
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 400;
     color: var(--text-primary);
     margin-bottom: 4px;
     line-height: 1.4;
@@ -1792,6 +1812,7 @@ body {
     .left-sidebar {
         width: 70px;
         padding: 12px 6px;
+        z-index: 1001;
     }
 
     .right-sidebar {
@@ -1846,13 +1867,18 @@ body {
     }
 
     .player-page .right-sidebar {
-        display: none;
+        display: block;
+        position: static;
+        width: 100%;
+        z-index: 1;
     }
 
     .top-bar {
         padding: 12px 15px;
         flex-wrap: wrap;
         gap: 12px;
+        position: sticky;
+        z-index: 1002;
     }
 
     .search-container {
@@ -2078,27 +2104,34 @@ body {
         display: flex;
         flex-direction: column;
         padding: 15px;
+        gap: 0;
+        position: relative;
     }
 
     .player-main {
         padding: 0;
         width: 100%;
+        display: flex;
+        flex-direction: column;
     }
 
     .player-video-title {
         font-size: 22px;
         margin-bottom: 12px;
+        order: 1;
     }
 
     .video-wrapper {
         min-height: 250px;
         margin-bottom: 15px;
+        order: 2;
     }
 
     .player-actions {
         flex-direction: column;
         gap: 10px;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
+        order: 4;
     }
 
     .action-btn {
@@ -2108,6 +2141,64 @@ body {
 
     .player-sidebar {
         display: none;
+    }
+
+    .right-sidebar {
+        display: block;
+        position: static;
+        width: 100%;
+        max-height: none;
+        overflow-y: visible;
+        padding: 15px;
+        margin-bottom: 20px;
+        order: 3;
+        z-index: 1;
+    }
+
+    .episodes-container {
+        margin-bottom: 12px;
+    }
+
+    .season-selector-wrapper h3,
+    .episodes-list-wrapper h3 {
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .season-dropdown {
+        font-size: 14px;
+        padding: 10px 32px 10px 14px;
+    }
+
+    .episodes-list {
+        max-height: 300px;
+    }
+
+    .episode-item {
+        padding: 10px;
+        margin-bottom: 6px;
+    }
+
+    .episode-number {
+        padding: 5px 8px;
+        font-size: 12px;
+        min-width: 35px;
+    }
+
+    .episode-name {
+        font-size: 12px;
+    }
+
+    .episode-meta {
+        font-size: 11px;
+    }
+
+    .recommended-section {
+        order: 6;
+        margin-top: 0;
+        margin-bottom: 30px;
+        position: relative;
+        z-index: 1;
     }
 
     .recommended-section .section-title {
