@@ -1559,69 +1559,229 @@ body {
     margin-bottom: 40px;
 }
 
+/* Episodes Container (TV Shows) */
+.episodes-container {
+    background: rgba(68, 187, 145, 0.05);
+    border: 1px solid rgba(68, 187, 145, 0.2);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.season-selector-wrapper {
+    margin-bottom: 16px;
+}
+
+.season-selector-wrapper h3 {
+    font-size: 15px;
+    margin-bottom: 10px;
+    color: var(--accent-green);
+    font-weight: 600;
+}
+
+.season-dropdown {
+    width: 100%;
+    padding: 10px 14px;
+    background: rgba(68, 187, 145, 0.1);
+    border: 1px solid rgba(68, 187, 145, 0.3);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.season-dropdown:hover {
+    background: rgba(68, 187, 145, 0.15);
+    border-color: var(--accent-green);
+}
+
+.season-dropdown:focus {
+    border-color: var(--accent-green);
+    box-shadow: 0 0 0 2px rgba(68, 187, 145, 0.2);
+}
+
+.season-dropdown option {
+    background: var(--bg-black);
+    color: var(--text-primary);
+    padding: 10px;
+}
+
+.episodes-list-wrapper h3 {
+    font-size: 15px;
+    margin-bottom: 10px;
+    color: var(--accent-green);
+    font-weight: 600;
+}
+
+.episodes-list {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.episodes-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.episodes-list::-webkit-scrollbar-track {
+    background: rgba(68, 187, 145, 0.05);
+    border-radius: 3px;
+}
+
+.episodes-list::-webkit-scrollbar-thumb {
+    background: rgba(68, 187, 145, 0.3);
+    border-radius: 3px;
+}
+
+.episodes-list::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-green);
+}
+
+.episode-item {
+    background: rgba(68, 187, 145, 0.08);
+    border: 1px solid rgba(68, 187, 145, 0.2);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.episode-item:hover {
+    background: rgba(68, 187, 145, 0.15);
+    border-color: var(--accent-green);
+    transform: translateX(2px);
+}
+
+.episode-item.active {
+    background: rgba(68, 187, 145, 0.2);
+    border-color: var(--accent-green);
+    box-shadow: 0 0 8px rgba(68, 187, 145, 0.3);
+}
+
+.episode-number {
+    background: rgba(68, 187, 145, 0.2);
+    border: 1px solid rgba(68, 187, 145, 0.3);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent-green);
+    flex-shrink: 0;
+    min-width: 40px;
+    text-align: center;
+}
+
+.episode-item.active .episode-number {
+    background: var(--accent-green);
+    color: var(--bg-black);
+}
+
+.episode-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.episode-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.episode-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.episode-duration {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.episode-duration svg {
+    width: 14px;
+    height: 14px;
+}
+
 /* Tablet Styles (768px - 1024px) */
 @media (max-width: 1024px) and (min-width: 769px) {
     .left-sidebar {
         width: 180px;
     }
-    
+
     .main-container {
         margin-left: 180px;
     }
-    
+
     .top-bar {
         padding: 18px 30px;
     }
-    
+
     .search-container {
         max-width: 450px;
     }
-    
+
     .hero-slideshow {
         height: 350px;
         margin: 25px 30px;
     }
-    
+
     .slide-title {
         font-size: 40px;
     }
-    
+
     .slide-content {
         padding: 40px;
     }
-    
+
     .slide-poster {
         width: 220px;
         height: 330px;
         right: 40px;
     }
-    
+
     .content-wrapper {
         padding: 0 30px 35px;
     }
-    
+
     .content-grid {
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
         gap: 16px;
     }
-    
+
     .content-card {
         min-width: 160px;
     }
-    
+
     .content-card img {
         height: 240px;
     }
-    
+
     .dropdown {
         width: 75%;
         height: 75vh;
     }
-    
+
     .player-page .main-container {
         margin-right: 280px;
     }
-    
+
     .right-sidebar {
         width: 280px;
     }
@@ -1633,21 +1793,21 @@ body {
         width: 70px;
         padding: 12px 6px;
     }
-    
+
     .right-sidebar {
         width: 70px;
         padding: 12px 6px;
     }
-    
+
     .nav-item span,
     .brand-text {
         display: none;
     }
-    
+
     .website-name {
         display: none;
     }
-    
+
     .website-name-short {
         display: block;
         font-size: 15px;
@@ -1655,99 +1815,99 @@ body {
         color: #ffffff;
         letter-spacing: 1px;
     }
-    
+
     .website-branding {
         justify-content: center;
         padding: 2px;
     }
-    
+
     .sidebar-box {
         padding: 10px 6px;
     }
-    
+
     .made-by {
         flex-direction: column;
         padding: 8px;
         gap: 4px;
     }
-    
+
     .brand-logo {
         width: 32px;
         height: 32px;
     }
-    
+
     .main-container {
         margin-left: 70px;
     }
-    
+
     .player-page .main-container {
         margin-left: 70px;
         margin-right: 0;
     }
-    
+
     .player-page .right-sidebar {
         display: none;
     }
-    
+
     .top-bar {
         padding: 12px 15px;
         flex-wrap: wrap;
         gap: 12px;
     }
-    
+
     .search-container {
         flex: 1;
         min-width: 200px;
         max-width: 100%;
     }
-    
+
     .search-container input {
         padding: 12px 16px 12px 42px;
         font-size: 14px;
     }
-    
+
     .account-container {
         display: flex;
     }
-    
+
     .user-actions {
         gap: 8px;
     }
-    
+
     .login-btn,
     .register-btn {
         padding: 8px 16px;
         font-size: 13px;
     }
-    
+
     .hero-slideshow {
         height: 250px;
         margin: 12px;
         border-radius: 10px;
     }
-    
+
     .slide-content {
         padding: 15px;
         max-width: 100%;
     }
-    
+
     .slide-title {
         font-size: 20px;
         margin-bottom: 8px;
         line-height: 1.2;
     }
-    
+
     .slide-meta {
         font-size: 11px;
         gap: 8px;
         margin-bottom: 10px;
     }
-    
+
     .rating-badge {
         padding: 4px 10px;
         font-size: 11px;
     }
-    
+
     .slide-description {
         font-size: 12px;
         line-height: 1.4;
@@ -1758,17 +1918,17 @@ body {
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
-    
+
     .slide-poster {
         display: none;
     }
-    
+
     .slide-buttons {
         flex-direction: row;
         gap: 8px;
         flex-wrap: wrap;
     }
-    
+
     .play-btn,
     .add-btn {
         flex: 1;
@@ -1777,78 +1937,78 @@ body {
         padding: 10px 16px;
         font-size: 13px;
     }
-    
+
     .play-btn svg,
     .add-btn svg {
         width: 16px;
         height: 16px;
     }
-    
+
     .content-wrapper {
         padding: 0 15px 25px;
     }
-    
+
     .browse-page {
         padding: 15px 20px 30px;
     }
-    
+
     .browse-header h1 {
         font-size: 32px;
         margin-bottom: 16px;
     }
-    
+
     .filter-buttons {
         gap: 8px;
     }
-    
+
     .filter-btn {
         padding: 8px 16px;
         font-size: 13px;
     }
-    
+
     .section-header {
         margin-bottom: 16px;
     }
-    
+
     .section-title {
         font-size: 20px;
     }
-    
+
     .nav-arrows {
         gap: 6px;
     }
-    
+
     .arrow-btn {
         width: 32px;
         height: 32px;
     }
-    
+
     .content-grid {
         grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
         gap: 12px;
     }
-    
+
     .content-card {
         min-width: 120px;
     }
-    
+
     .content-card img {
         height: 180px;
     }
-    
+
     .content-card-title {
         font-size: 13px;
     }
-    
+
     .content-card-meta {
         font-size: 11px;
     }
-    
+
     .slideshow-control {
         width: 36px;
         height: 36px;
     }
-    
+
     .dropdown {
         width: 90%;
         height: auto;
@@ -1858,7 +2018,7 @@ body {
         transform: translate(-50%, -50%);
         border-radius: 12px;
     }
-    
+
     .dropdown-sidebar {
         width: 100%;
         padding: 12px;
@@ -1869,222 +2029,222 @@ body {
         gap: 8px;
         flex-shrink: 0;
     }
-    
+
     .dropdown-content {
         width: 100%;
         padding: 15px;
         max-height: calc(80vh - 80px);
         overflow-y: auto;
     }
-    
+
     .dropdown.active {
         display: flex;
         flex-direction: column;
     }
-    
+
     .dropdown-nav-item {
         padding: 10px 14px;
         font-size: 13px;
         white-space: nowrap;
     }
-    
+
     .dropdown-header {
         font-size: 18px;
         margin-bottom: 15px;
     }
-    
+
     .profile-avatar-large {
         width: 90px;
         height: 90px;
         margin-bottom: 15px;
     }
-    
+
     .profile-avatar-large svg {
         width: 45px;
         height: 45px;
     }
-    
+
     .profile-info-grid {
         grid-template-columns: 1fr;
         gap: 12px;
         margin-bottom: 20px;
     }
-    
+
     .profile-info-card {
         padding: 15px;
     }
-    
+
     .player-layout {
         display: flex;
         flex-direction: column;
         padding: 15px;
     }
-    
+
     .player-main {
         padding: 0;
         width: 100%;
     }
-    
+
     .player-video-title {
         font-size: 22px;
         margin-bottom: 12px;
     }
-    
+
     .video-wrapper {
         min-height: 250px;
         margin-bottom: 15px;
     }
-    
+
     .player-actions {
         flex-direction: column;
         gap: 10px;
         margin-bottom: 30px;
     }
-    
+
     .action-btn {
         width: 100%;
         justify-content: center;
     }
-    
+
     .player-sidebar {
         display: none;
     }
-    
+
     .recommended-section .section-title {
         font-size: 18px;
     }
-    
+
     .recommended-section .content-card {
         min-width: 140px;
     }
-    
+
     .recommended-section .content-card img {
         height: 210px;
     }
-    
+
     .pagination {
         flex-wrap: wrap;
         gap: 15px;
         margin: 30px 0;
     }
-    
+
     .pagination button {
         padding: 10px 20px;
         font-size: 13px;
     }
-    
+
     .pagination #pageInfo {
         font-size: 14px;
     }
-    
+
     .auth-box {
         padding: 40px 30px 30px;
     }
-    
+
     .auth-box h1 {
         font-size: 28px;
         margin-bottom: 24px;
     }
-    
+
     .form-group input {
         padding: 12px 16px;
         font-size: 14px;
     }
-    
+
     .cast-list {
         grid-template-columns: 1fr;
     }
-    
+
     .movie-info-container {
         gap: 10px;
     }
-    
+
     .movie-header {
         flex-direction: column;
         padding: 12px;
         gap: 10px;
     }
-    
+
     .movie-poster-small {
         width: 80px;
     }
-    
+
     .movie-header-details h2 {
         font-size: 16px;
     }
-    
+
     .movie-meta-info {
         font-size: 12px;
     }
-    
+
     .movie-description,
     .movie-genres,
     .movie-cast {
         padding: 12px;
     }
-    
+
     .movie-description h3,
     .movie-genres h3,
     .movie-cast h3 {
         font-size: 13px;
         margin-bottom: 8px;
     }
-    
+
     .movie-description p {
         font-size: 12px;
     }
-    
+
     .genre-tag {
         font-size: 11px;
         padding: 5px 10px;
     }
-    
+
     .cast-grid {
         gap: 10px;
     }
-    
+
     .cast-photo {
         width: 40px;
         height: 40px;
     }
-    
+
     .cast-name {
         font-size: 12px;
     }
-    
+
     .site-footer {
         margin-top: 40px;
         padding: 20px 0;
     }
-    
+
     .site-footer p {
         font-size: 12px;
         padding: 0 15px;
     }
-    
+
     .coming-soon-message {
         font-size: 32px;
         padding: 30px;
         letter-spacing: 2px;
     }
-    
+
     .search-suggestions {
         max-height: 300px;
     }
-    
+
     .search-suggestion-item {
         padding: 10px 12px;
     }
-    
+
     .search-suggestion-poster {
         width: 40px;
         height: 60px;
     }
-    
+
     .search-suggestion-title {
         font-size: 13px;
     }
-    
+
     .search-suggestion-meta {
         font-size: 11px;
     }
@@ -2096,115 +2256,115 @@ body {
         width: 60px;
         padding: 10px 4px;
     }
-    
+
     .main-container {
         margin-left: 60px;
     }
-    
+
     .nav-item {
         padding: 10px 8px;
         justify-content: center;
     }
-    
+
     .nav-item svg {
         min-width: 18px;
     }
-    
+
     .top-bar {
         padding: 10px 12px;
     }
-    
+
     .search-container input {
         padding: 10px 14px 10px 38px;
         font-size: 13px;
     }
-    
+
     .login-btn,
     .register-btn {
         padding: 7px 12px;
         font-size: 12px;
     }
-    
+
     .hero-slideshow {
         height: 220px;
         margin: 10px;
     }
-    
+
     .slide-content {
         padding: 12px;
     }
-    
+
     .slide-title {
         font-size: 18px;
         margin-bottom: 6px;
     }
-    
+
     .slide-meta {
         font-size: 10px;
         gap: 6px;
         margin-bottom: 8px;
     }
-    
+
     .slide-description {
         font-size: 11px;
         line-height: 1.3;
         margin-bottom: 10px;
         -webkit-line-clamp: 2;
     }
-    
+
     .rating-badge {
         padding: 3px 8px;
         font-size: 10px;
     }
-    
+
     .play-btn,
     .add-btn {
         padding: 8px 12px;
         font-size: 12px;
     }
-    
+
     .dropdown {
         width: 92%;
         max-height: 85vh;
         top: 50%;
         transform: translate(-50%, -50%);
     }
-    
+
     .dropdown-sidebar {
         padding: 10px;
     }
-    
+
     .dropdown-content {
         padding: 12px;
         max-height: calc(85vh - 70px);
     }
-    
+
     .content-grid {
         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
         gap: 10px;
     }
-    
+
     .content-card {
         min-width: 100px;
     }
-    
+
     .content-card img {
         height: 150px;
     }
-    
+
     .browse-header h1 {
         font-size: 28px;
     }
-    
+
     .filter-btn {
         padding: 7px 12px;
         font-size: 12px;
     }
-    
+
     .section-title {
         font-size: 18px;
     }
-    
+
     .dropdown {
         width: 80%;
         height: auto;
@@ -2213,74 +2373,74 @@ body {
         top: 50%;
         transform: translate(-50%, -50%);
     }
-    
+
     .dropdown-sidebar {
         width: 100%;
         padding: 10px 8px;
     }
-    
+
     .dropdown-content {
         width: 100%;
         padding: 12px;
         max-height: calc(88vh - 65px);
     }
-    
+
     .dropdown-nav-item {
         padding: 8px 12px;
         font-size: 12px;
     }
-    
+
     .dropdown-close {
         top: 12px;
         right: 12px;
         font-size: 24px;
     }
-    
+
     .profile-section h2 {
         font-size: 18px;
         margin-bottom: 15px;
     }
-    
+
     .profile-avatar-large {
         width: 75px;
         height: 75px;
         margin-bottom: 12px;
     }
-    
+
     .profile-avatar-large svg {
         width: 38px;
         height: 38px;
     }
-    
+
     .profile-info-card {
         padding: 12px;
     }
-    
+
     .player-video-title {
         font-size: 18px;
     }
-    
+
     .video-wrapper {
         min-height: 200px;
     }
-    
+
     .action-btn {
         padding: 10px 20px;
         font-size: 13px;
     }
-    
+
     .recommended-section .content-card {
         min-width: 120px;
     }
-    
+
     .auth-box {
         padding: 30px 20px 25px;
     }
-    
+
     .auth-box h1 {
         font-size: 24px;
     }
-    
+
     .coming-soon-message {
         font-size: 24px;
         padding: 20px;
@@ -2292,30 +2452,30 @@ body {
     .hero-slideshow {
         height: 200px;
     }
-    
+
     .slide-content {
         padding: 12px 20px;
     }
-    
+
     .slide-title {
         font-size: 18px;
     }
-    
+
     .slide-description {
         font-size: 11px;
         -webkit-line-clamp: 2;
     }
-    
+
     .slide-buttons {
         gap: 6px;
     }
-    
+
     .play-btn,
     .add-btn {
         padding: 8px 14px;
         font-size: 12px;
     }
-    
+
     .video-wrapper {
         min-height: 300px;
     }
@@ -2335,13 +2495,13 @@ body {
         -webkit-tap-highlight-color: rgba(68, 187, 145, 0.2);
         touch-action: manipulation;
     }
-    
+
     .content-card,
     .search-suggestion-item {
         cursor: pointer;
         -webkit-tap-highlight-color: rgba(68, 187, 145, 0.1);
     }
-    
+
     /* Prevent text selection on interactive elements */
     .nav-item,
     .filter-btn,

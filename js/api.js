@@ -90,6 +90,10 @@ async function getTVShowDetails(tvId) {
     return await fetchTMDB(`/tv/${tvId}`);
 }
 
+async function getTVSeasonDetails(tvId, seasonNumber) {
+    return await fetchTMDB(`/tv/${tvId}/season/${seasonNumber}`);
+}
+
 async function searchMovies(query, page = 1) {
     return await fetchTMDB(`/search/movie?query=${encodeURIComponent(query)}&page=${page}`);
 }
@@ -117,7 +121,7 @@ async function getTrendingAnime() {
             }
         }
     }`;
-    
+
     const data = await fetchAniList(query);
     return data ? data.Page.media : [];
 }
@@ -141,7 +145,7 @@ async function getPopularAnime(page = 1) {
             }
         }
     }`;
-    
+
     const data = await fetchAniList(query, { page });
     return data ? data.Page.media : [];
 }
@@ -165,7 +169,7 @@ async function getTopRatedAnime(page = 1) {
             }
         }
     }`;
-    
+
     const data = await fetchAniList(query, { page });
     return data ? data.Page.media : [];
 }
@@ -189,19 +193,23 @@ async function searchAnime(query) {
             }
         }
     }`;
-    
+
     const data = await fetchAniList(graphqlQuery, { search: query });
     return data ? data.Page.media : [];
 }
 
-function getVideasyEmbedUrl(tmdbId, type = 'movie') {
+function getVideasyEmbedUrl(tmdbId, type = 'movie', season = null, episode = null) {
     // Videasy.net player URL format:
     // Movies: https://player.videasy.net/movie/{tmdb_id}
     // TV Shows: https://player.videasy.net/tv/{tmdb_id}
+    // TV Episodes: https://player.videasy.net/tv/{tmdb_id}/{season}/{episode}
     // Anime: https://player.videasy.net/anime/{anilist_id}
     if (type === 'movie') {
         return `https://player.videasy.net/movie/${tmdbId}`;
     } else if (type === 'tv') {
+        if (season !== null && episode !== null) {
+            return `https://player.videasy.net/tv/${tmdbId}/${season}/${episode}`;
+        }
         return `https://player.videasy.net/tv/${tmdbId}`;
     } else if (type === 'anime') {
         return `https://player.videasy.net/anime/${tmdbId}`;
@@ -221,9 +229,9 @@ function formatAnimeTitle(anime) {
 function createContentCard(item, type = 'movie') {
     const card = document.createElement('div');
     card.className = 'content-card';
-    
+
     let imageUrl, title, year, rating;
-    
+
     if (type === 'anime') {
         imageUrl = item.coverImage.large;
         title = formatAnimeTitle(item);
@@ -235,7 +243,7 @@ function createContentCard(item, type = 'movie') {
         year = (item.release_date || item.first_air_date || '').substring(0, 4);
         rating = item.vote_average ? item.vote_average.toFixed(1) : 'N/A';
     }
-    
+
     card.innerHTML = `
         <img src="${imageUrl}" alt="${title}" loading="lazy">
         ${rating !== 'N/A' ? `<div class="card-rating">
@@ -249,11 +257,11 @@ function createContentCard(item, type = 'movie') {
             </div>
         </div>
     `;
-    
+
     card.addEventListener('click', () => {
         const id = item.id;
         window.location.href = `player.html?id=${id}&type=${type}`;
     });
-    
+
     return card;
 }

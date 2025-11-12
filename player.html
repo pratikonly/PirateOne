@@ -10,7 +10,7 @@
     <script src="config.js"></script>
 </head>
 <body class="player-page">
-    
+
     <!-- Left Sidebar -->
     <nav class="left-sidebar">
         <!-- Upper Box - Branding & Made by -->
@@ -150,7 +150,7 @@
                 <div class="video-wrapper" id="videoWrapper">
                     <div class="loading">Loading player...</div>
                 </div>
-                
+
                 <div class="player-actions">
                     <button class="action-btn watchlist-btn" id="addToWatchlistBtn">
                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
@@ -176,6 +176,23 @@
 
             <div class="right-sidebar">
                 <div class="movie-info-container">
+                    <!-- Season & Episode Selector (Only for TV Shows) -->
+                    <div class="episodes-container" id="episodesContainer" style="display: none;">
+                        <div class="season-selector-wrapper">
+                            <h3>Seasons</h3>
+                            <select id="seasonSelector" class="season-dropdown">
+                                <option value="">Loading seasons...</option>
+                            </select>
+                        </div>
+
+                        <div class="episodes-list-wrapper">
+                            <h3>Episodes</h3>
+                            <div class="episodes-list" id="episodesList">
+                                <div class="loading">Loading episodes...</div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="movie-header">
                         <div class="movie-poster-small">
                             <img id="moviePoster" src="" alt="Movie Poster">
@@ -188,17 +205,17 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="movie-description">
                         <h3>Description</h3>
                         <p id="movieDescription">Loading description...</p>
                     </div>
-                    
+
                     <div class="movie-genres">
                         <h3>Genres</h3>
                         <div class="genres-tags" id="movieGenres"></div>
                     </div>
-                    
+
                     <div class="movie-cast">
                         <h3>Cast</h3>
                         <div class="cast-grid" id="movieCast">
