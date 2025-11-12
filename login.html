@@ -31,14 +31,13 @@
 
     <script src="js/auth.js"></script>
     <script>
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('errorMessage');
 
-            const success = await login(email, password);
-            if (success) {
+            if (login(email, password)) {
                 window.location.href = 'index.html';
             } else {
                 errorDiv.textContent = 'Invalid email or password';

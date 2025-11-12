@@ -37,7 +37,7 @@
 
     <script src="js/auth.js"></script>
     <script>
-        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
@@ -51,8 +51,7 @@
                 return;
             }
 
-            const success = await register(name, email, password);
-            if (success) {
+            if (register(name, email, password)) {
                 window.location.href = 'login.html';
             } else {
                 errorDiv.textContent = 'Email already exists';

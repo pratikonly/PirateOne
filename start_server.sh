@@ -1,20 +1,15 @@
-
 #!/bin/bash
 
-# Generate config.js
-cat > config.js << 'EOF'
-window.CONFIG = {
-    TMDB_API_KEY: 'd56ba8afb5eca855e13f2507f36f9a62'
-};
+python3 << 'EOF'
+import os
+
+tmdb_key = os.environ.get('TMDB_API_KEY', '')
+with open('config.js', 'w') as f:
+    f.write(f'''window.CONFIG = {{
+    TMDB_API_KEY: '{tmdb_key}'
+}};
+''')
+print('Config generated')
 EOF
 
-echo "Config generated"
-
-# Set DATABASE_URL environment variable
-export DATABASE_URL="postgresql://neondb_owner:npg_FAdfZ5uD2hiL@ep-dark-mountain-adl3jwkg-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require"
-
-# Start API server in background
-python api_server.py &
-
-# Start frontend server
-python main.py
+python3 server.py

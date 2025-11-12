@@ -22,7 +22,7 @@ function updateUserAvatar() {
 function updateBrandingLink() {
     const brandingLink = document.getElementById('brandingLink');
     if (brandingLink) {
-        brandingLink.href = '#';
+        brandingLink.href = 'https://xpratik.vercel.app/';
         brandingLink.target = '_blank';
     }
 }
@@ -59,7 +59,7 @@ function ensureClickableBranding() {
     const madeByDiv = document.querySelector('.made-by');
     if (madeByDiv && madeByDiv.tagName !== 'A') {
         const anchor = document.createElement('a');
-        anchor.href = '#';
+        anchor.href = 'https://xpratik.vercel.app/';
         anchor.target = '_blank';
         anchor.className = 'made-by';
         anchor.id = 'brandingLink';
@@ -67,7 +67,7 @@ function ensureClickableBranding() {
         anchor.innerHTML = madeByDiv.innerHTML;
         madeByDiv.parentNode.replaceChild(anchor, madeByDiv);
     } else if (madeByDiv && madeByDiv.tagName === 'A') {
-        madeByDiv.href = '#';
+        madeByDiv.href = 'https://xpratik.vercel.app/';
         madeByDiv.target = '_blank';
     }
 }
