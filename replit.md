@@ -4,7 +4,7 @@
 PirateOne is a modern, Netflix-style streaming platform built entirely with HTML, CSS, and JavaScript. It features a dark theme, seamless API integration, and a user-friendly interface for browsing movies, TV shows, and anime.
 
 ## Features
-- **Dark Theme UI**: Pure black (#000000) background with #44BB91 accent color
+- **Dark Theme UI**: Pure black (#000000) background with #d89d9d accent color
 - **Modern Sidebar**: Dual-box sidebar layout (1:4 ratio) with smooth rounded corners
   - Upper box: Home and Search navigation
   - Lower box: Movies, TV Shows, Anime, Manga + History, WatchList, Settings
