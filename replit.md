@@ -1,7 +1,7 @@
 # PirateOne - Your Ultimate Streaming Platform
 
 ## Overview
-PirateOne is a modern, Netflix-style streaming platform built entirely with HTML, CSS, and JavaScript. It features a dark theme, seamless API integration, and a user-friendly interface for browsing movies, TV shows, and anime.
+PirateOne is a modern, Netflix-style streaming platform built with HTML, CSS, JavaScript frontend and Django backend. It features a dark theme, seamless API integration, and a user-friendly interface for browsing movies, TV shows, and anime.
 
 ## Features
 - **Dark Theme UI**: Pure black (#000000) background with #d89d9d accent color
@@ -10,16 +10,41 @@ PirateOne is a modern, Netflix-style streaming platform built entirely with HTML
   - Lower box: Movies, TV Shows, Anime, Manga + History, WatchList, Settings
 - **Hero Slideshow**: Dynamic featured content with movie description, rating, and action buttons
 - **Search Bar**: Prominent top search bar with quick navigation
-- **Account Management**: Optional login/register with account circle icon
+- **Account Management**: Full user authentication with Django backend
 - **Homepage**: Trending Movies, Trending Shows, and Trending Anime sections
 - **Browse Pages**: Dedicated pages for Movies, TV Shows, and Anime with pagination
 - **Video Player**: Embedded video playback using Videasy.net API integration
-- **Authentication**: Client-side login/register system using localStorage
+- **Authentication**: Django-based authentication with PostgreSQL database
 - **User Profile**: View watch history and ratings
+- **Watchlist**: Save movies and shows to watch later
+- **Watch History**: Track what you've watched
 - **Settings**: Customize playback and display preferences
 - **Rating System**: Rate content and track your ratings
+- **Django Admin Panel**: Full admin access to manage users and data
 - **Responsive Design**: Optimized for desktop and mobile devices
 - **Custom Branding**: "Made by Pratik" tag with logo placeholder
+
+## Django Admin Panel
+
+### Access Admin Panel
+- **URL**: `/admin/`
+- **Username**: `admin`
+- **Email**: `admin@cineverse.com`
+- **Password**: `admin123`
+
+### Admin Features
+You can view and manage:
+- **Users**: All registered users with their email, username, creation date
+- **Watchlist Items**: See what content users have saved to watch later
+- **Watch History**: Track what content users have watched
+- **Ratings**: View user ratings for movies and shows
+
+## Data Storage
+All user data is stored in a PostgreSQL database:
+- User accounts and authentication
+- Watchlist items
+- Watch history
+- Content ratings
 
 ## API Integration
 1. **TMDb API** (themoviedb.org)
@@ -46,15 +71,29 @@ PirateOne is a modern, Netflix-style streaming platform built entirely with HTML
 6. Copy your API Key (v3 auth)
 
 ### 2. Add API Key to Secrets
-The TMDB_API_KEY has already been added to your Replit Secrets. The application will automatically use this key from the environment variable. If you need to update it:
+The TMDB_API_KEY needs to be added to your Replit Secrets:
 1. Open the Secrets panel in Replit
-2. Update the TMDB_API_KEY value
+2. Add TMDB_API_KEY with your TMDb API key value
 3. Restart the workflow
 
 ### 3. Using the Application
-The server is automatically running on port 5000. Just open the webview to access PirateOne!
+The Django server is automatically running on port 5000. Just open the webview to access PirateOne!
 
 **First-time users**: You'll need to register an account to use PirateOne. Click "Sign up now" on the login page.
+
+## Vercel Deployment
+
+### Required Environment Variables for Vercel
+When deploying to Vercel, add these environment variables:
+- `DATABASE_URL`: Your production PostgreSQL database URL (recommend Neon, Supabase, or Railway)
+- `DJANGO_SECRET_KEY`: A secure random string for Django
+- `TMDB_API_KEY`: Your TMDb API key
+- `DEBUG`: Set to `False` for production
+
+### Running Migrations on Production
+After deploying to Vercel, you'll need to run migrations on your production database. You can do this by:
+1. Running `python manage.py migrate` locally with your production DATABASE_URL
+2. Or using Vercel's build command to run migrations
 
 ## Project Structure
 ```
@@ -69,19 +108,32 @@ The server is automatically running on port 5000. Just open the webview to acces
 ├── tvshows.html        # Browse TV shows
 ├── anime.html          # Browse anime
 ├── search.html         # Search page
+├── watchlist.html      # User watchlist
+├── history.html        # Watch history
 ├── css/
 │   └── styles.css      # Main stylesheet
 ├── js/
 │   ├── api.js          # API integration (TMDb, AniList, Videasy)
 │   ├── auth.js         # Authentication logic with avatar generation
+│   ├── django-api.js   # Django backend API client
 │   ├── layout.js       # Shared UI components (avatars, branding)
 │   ├── main.js         # Homepage functionality
 │   ├── player.js       # Video player logic
 │   ├── browse.js       # Browse pages logic
 │   ├── search.js       # Search functionality
 │   └── search-suggestions.js  # Search autocomplete
-└── server.py           # Python HTTP server
-
+├── api/                # Django app
+│   ├── models.py       # User, WatchlistItem, WatchHistory, Rating models
+│   ├── views.py        # API endpoints
+│   ├── admin.py        # Admin panel configuration
+│   └── urls.py         # API URL routing
+├── pirateone_backend/  # Django project settings
+│   ├── settings.py     # Django configuration
+│   ├── urls.py         # Main URL routing
+│   └── wsgi.py         # WSGI for deployment
+├── manage.py           # Django management script
+├── start_server.sh     # Server startup script
+└── vercel.json         # Vercel deployment configuration
 ```
 
 ## How It Works
@@ -92,20 +144,28 @@ The server is automatically running on port 5000. Just open the webview to acces
    - User searches for content → TMDb API fetches data and IDs → IDs passed to Videasy.net API → Video plays in embedded player
 
 3. **Data Storage**:
-   - All user data (auth, history, ratings) stored in browser's localStorage
-   - No backend database required
+   - All user data stored in PostgreSQL database via Django ORM
+   - Authentication handled by Django session management
+   - Data persists across devices when logged in
 
 ## Technologies Used
+- **Backend**: Django 5.2, PostgreSQL, WhiteNoise
 - **Frontend**: HTML5, CSS3, Vanilla JavaScript
 - **APIs**: 
   - TMDb API (movies & TV shows data)
   - AniList GraphQL API (anime data)
   - Videasy.net Embed API (video playback)
   - DiceBear Avatars API (user profile pictures)
-- **Storage**: Browser localStorage
-- **Server**: Python HTTP Server
+- **Database**: PostgreSQL (Replit/Neon)
+- **Deployment**: Vercel (configured)
 
 ## Recent Changes
+- 2025-12-18: Added Django backend with admin panel
+  - Implemented Django backend with PostgreSQL database
+  - Created admin panel to manage users, watchlists, history, and ratings
+  - Admin credentials: admin@cineverse.com / admin123
+  - Updated frontend to use Django API for authentication
+  - Configured Vercel deployment for Django
 - 2025-11-07: Avatar and branding enhancements
   - Integrated DiceBear Avatars API for unique user profile pictures
   - Each user gets a random, unique avatar based on their email/ID
@@ -127,9 +187,9 @@ The server is automatically running on port 5000. Just open the webview to acces
 
 ## User Preferences
 - Dark theme with Netflix-inspired design
-- Static frontend-only implementation
-- No backend server or database
-- All features client-side with localStorage
+- Django backend with PostgreSQL database
+- Admin panel for data management
+- Vercel-compatible deployment
 
 ## Attribution
 **Made by Pratik**
@@ -137,5 +197,6 @@ The server is automatically running on port 5000. Just open the webview to acces
 ## Notes
 - This is a demo/educational project
 - API keys should be kept secure in production
+- Change the admin password before deploying to production!
 - Videasy.net API may have usage limits
 - Anime playback through Videasy may be limited (depends on Videasy's anime support)

@@ -40,6 +40,10 @@
       "dest": "/js/$1"
     },
     {
+      "src": "/config.js",
+      "dest": "pirateone_backend/wsgi.py"
+    },
+    {
       "src": "/(.*\\.html)",
       "dest": "/$1"
     },

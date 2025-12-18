@@ -2,8 +2,17 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.views.generic import TemplateView
 from django.conf import settings
-from django.views.static import serve
+from django.conf.urls.static import static
+from django.http import HttpResponse
 import os
+
+def config_js_view(request):
+    tmdb_key = os.environ.get('TMDB_API_KEY', '')
+    content = f'''window.CONFIG = {{
+    TMDB_API_KEY: '{tmdb_key}'
+}};
+'''
+    return HttpResponse(content, content_type='application/javascript')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -20,7 +29,12 @@ urlpatterns = [
     path('history.html', TemplateView.as_view(template_name='history.html'), name='history'),
     path('profile.html', TemplateView.as_view(template_name='profile.html'), name='profile'),
     path('settings.html', TemplateView.as_view(template_name='settings.html'), name='settings'),
-    re_path(r'^css/(?P<path>.*)$', serve, {'document_root': os.path.join(settings.BASE_DIR, 'css')}),
-    re_path(r'^js/(?P<path>.*)$', serve, {'document_root': os.path.join(settings.BASE_DIR, 'js')}),
-    re_path(r'^config\.js$', serve, {'document_root': settings.BASE_DIR, 'path': 'config.js'}),
+    path('config.js', config_js_view, name='config_js'),
 ]
+
+if settings.DEBUG:
+    from django.views.static import serve
+    urlpatterns += [
+        re_path(r'^css/(?P<path>.*)$', serve, {'document_root': os.path.join(settings.BASE_DIR, 'css')}),
+        re_path(r'^js/(?P<path>.*)$', serve, {'document_root': os.path.join(settings.BASE_DIR, 'js')}),
+    ]
