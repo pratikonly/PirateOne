@@ -12,4 +12,6 @@ with open('config.js', 'w') as f:
 print('Config generated')
 EOF
 
-python3 server.py
+python manage.py migrate --run-syncdb
+
+python manage.py runserver 0.0.0.0:5000
