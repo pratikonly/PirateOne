@@ -3,7 +3,7 @@
   "buildCommand": "bash build.sh",
   "builds": [
     {
-      "src": "pirateone_backend/wsgi.py",
+      "src": "api/vercel_handler.py",
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "15mb",
@@ -30,15 +30,15 @@
   "routes": [
     {
       "src": "/admin/(.*)",
-      "dest": "pirateone_backend/wsgi.py"
+      "dest": "api/vercel_handler.py"
     },
     {
       "src": "/api/(.*)",
-      "dest": "pirateone_backend/wsgi.py"
+      "dest": "api/vercel_handler.py"
     },
     {
       "src": "/config.js",
-      "dest": "pirateone_backend/wsgi.py"
+      "dest": "api/vercel_handler.py"
     },
     {
       "src": "/static/(.*)",
