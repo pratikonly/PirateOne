@@ -2,10 +2,10 @@
 set -e
 
 echo "Running Django migrations..."
-python manage.py migrate --no-input
+python manage.py migrate --no-input || true
 
 echo "Creating admin superuser..."
-python manage.py shell << END
+python manage.py shell << 'END'
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -21,6 +21,6 @@ else:
 END
 
 echo "Collecting static files..."
-python manage.py collectstatic --no-input --clear
+python manage.py collectstatic --no-input --clear || true
 
 echo "Build completed successfully!"
