@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "buildCommand": "bash build.sh",
   "builds": [
     {
       "src": "pirateone_backend/wsgi.py",
@@ -28,6 +29,18 @@
   ],
   "routes": [
     {
+      "src": "/admin/(.*)",
+      "dest": "pirateone_backend/wsgi.py"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "pirateone_backend/wsgi.py"
+    },
+    {
+      "src": "/config.js",
+      "dest": "pirateone_backend/wsgi.py"
+    },
+    {
       "src": "/static/(.*)",
       "dest": "/$1"
     },
@@ -40,24 +53,12 @@
       "dest": "/js/$1"
     },
     {
-      "src": "/config.js",
-      "dest": "pirateone_backend/wsgi.py"
-    },
-    {
       "src": "/(.*\\.html)",
       "dest": "/$1"
     },
     {
       "src": "/favicon.svg",
       "dest": "/favicon.svg"
-    },
-    {
-      "src": "/admin/(.*)",
-      "dest": "pirateone_backend/wsgi.py"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "pirateone_backend/wsgi.py"
     },
     {
       "src": "/(.*)",
