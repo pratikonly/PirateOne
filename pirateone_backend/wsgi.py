@@ -1,17 +1,16 @@
 """
 WSGI config for pirateone_backend project.
 
-It exposes the WSGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/5.2/howto/deployment/wsgi/
+It exposes the WSGI callable as variables named ``application``, ``app``, and ``handler``
+so that Vercel can find it.
 """
 
 import os
-from pathlib import Path
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pirateone_backend.settings')
 
 from django.core.wsgi import get_wsgi_application
 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pirateone_backend.settings')
+
 application = get_wsgi_application()
+app = application          # Vercel looks for 'app' or 'handler'
+handler = application      # Some configurations prefer 'handler'
