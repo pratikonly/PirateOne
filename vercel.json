@@ -3,10 +3,7 @@
   "builds": [
     {
       "src": "build.sh",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "collected_static"
-      }
+      "use": "@vercel/static-build"
     },
     {
       "src": "pirateone_backend/wsgi.py",
@@ -14,18 +11,6 @@
     }
   ],
   "routes": [
-    {
-      "src": "/static/(.*)",
-      "dest": "/collected_static/static/$1"
-    },
-    {
-      "src": "/css/(.*)",
-      "dest": "/collected_static/css/$1"
-    },
-    {
-      "src": "/js/(.*)",
-      "dest": "/collected_static/js/$1"
-    },
     {
       "src": "/(.*)",
       "dest": "pirateone_backend/wsgi.py"
