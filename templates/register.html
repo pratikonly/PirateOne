@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up | PirateOne</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="stylesheet" href="css/styles.css">
-    <script src="config.js"></script>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body class="auth-page">
     <div class="auth-container">
@@ -29,14 +29,14 @@
                 <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
             </form>
             <div class="auth-footer">
-                <p>Already have an account? <a href="login.html">Sign in</a></p>
-                <p><a href="index.html">Continue as Guest</a></p>
+                <p>Already have an account? <a href="/login/">Sign in</a></p>
+                <p><a href="/">Continue as Guest</a></p>
             </div>
         </div>
     </div>
 
-    <script src="js/django-api.js"></script>
-    <script src="js/auth.js"></script>
+    <script src="{% static 'js/django-api.js' %}"></script>
+    <script src="{% static 'js/auth.js' %}"></script>
     <script>
         document.getElementById('registerForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -53,7 +53,7 @@
             }
 
             if (register(name, email, password)) {
-                window.location.href = 'login.html';
+                window.location.href = '/login/';
             } else {
                 errorDiv.textContent = 'Email already exists';
                 errorDiv.style.display = 'block';

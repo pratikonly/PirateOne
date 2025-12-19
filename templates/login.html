@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In | PirateOne</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="stylesheet" href="css/styles.css">
-    <script src="config.js"></script>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body class="auth-page">
     <div class="auth-container">
@@ -23,14 +23,14 @@
                 <button type="submit" class="btn btn-primary btn-block">Sign In</button>
             </form>
             <div class="auth-footer">
-                <p>New to PirateOne? <a href="register.html">Sign up now</a></p>
-                <p><a href="index.html">Continue as Guest</a></p>
+                <p>New to PirateOne? <a href="/register/">Sign up now</a></p>
+                <p><a href="/">Continue as Guest</a></p>
             </div>
         </div>
     </div>
 
-    <script src="js/django-api.js"></script>
-    <script src="js/auth.js"></script>
+    <script src="{% static 'js/django-api.js' %}"></script>
+    <script src="{% static 'js/auth.js' %}"></script>
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -39,7 +39,7 @@
             const errorDiv = document.getElementById('errorMessage');
 
             if (login(email, password)) {
-                window.location.href = 'index.html';
+                window.location.href = '/';
             } else {
                 errorDiv.textContent = 'Invalid email or password';
                 errorDiv.style.display = 'block';
