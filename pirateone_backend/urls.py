@@ -18,19 +18,19 @@ urlpatterns = [
     path('api/', include('api.urls')),
     path('config.js', config_js_view, name='config_js'),
 
-    # Frontend routes - clean URLs (no .html in browser)
-    path('', TemplateView.as_view(template_name='index.html'), name='home'),
-    path('login/', TemplateView.as_view(template_name='login.html'), name='login_page'),
-    path('register/', TemplateView.as_view(template_name='register.html'), name='register_page'),
-    path('movies/', TemplateView.as_view(template_name='movies.html'), name='movies'),
-    path('tvshows/', TemplateView.as_view(template_name='tvshows.html'), name='tvshows'),
-    path('anime/', TemplateView.as_view(template_name='anime.html'), name='anime'),
-    path('search/', TemplateView.as_view(template_name='search.html'), name='search'),
-    path('player/', TemplateView.as_view(template_name='player.html'), name='player'),
-    path('watchlist/', TemplateView.as_view(template_name='watchlist.html'), name='watchlist'),
-    path('history/', TemplateView.as_view(template_name='history.html'), name='history'),
-    path('profile/', TemplateView.as_view(template_name='profile.html'), name='profile'),
-    path('settings/', TemplateView.as_view(template_name='settings.html'), name='settings'),
+    # Frontend routes - now with 'api/' prefix for templates
+    path('', TemplateView.as_view(template_name='api/index.html'), name='home'),
+    path('login/', TemplateView.as_view(template_name='api/login.html'), name='login_page'),
+    path('register/', TemplateView.as_view(template_name='api/register.html'), name='register_page'),
+    path('movies/', TemplateView.as_view(template_name='api/movies.html'), name='movies'),
+    path('tvshows/', TemplateView.as_view(template_name='api/tvshows.html'), name='tvshows'),
+    path('anime/', TemplateView.as_view(template_name='api/anime.html'), name='anime'),
+    path('search/', TemplateView.as_view(template_name='api/search.html'), name='search'),
+    path('player/', TemplateView.as_view(template_name='api/player.html'), name='player'),
+    path('watchlist/', TemplateView.as_view(template_name='api/watchlist.html'), name='watchlist'),
+    path('history/', TemplateView.as_view(template_name='api/history.html'), name='history'),
+    path('profile/', TemplateView.as_view(template_name='api/profile.html'), name='profile'),
+    path('settings/', TemplateView.as_view(template_name='api/settings.html'), name='settings'),
 ]
 
 # ONLY add static serving in DEBUG mode (local development)
