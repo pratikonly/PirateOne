@@ -96,8 +96,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'css'),
-    os.path.join(BASE_DIR, 'js'),
+    BASE_DIR / 'css',
+    BASE_DIR / 'js',
+    BASE_DIR / 'templates',  
 ]
 STORAGES = {
     "staticfiles": {
