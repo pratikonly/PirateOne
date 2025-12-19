@@ -1,37 +1,16 @@
 {
   "version": 2,
-  "buildCommand": "bash build.sh",
   "builds": [
     {
+      "src": "build.sh",
+      "use": "@vercel/static-build"
+    },
+    {
       "src": "pirateone_backend/wsgi.py",
-      "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "15mb",
-        "runtime": "python3.11"
-      }
+      "use": "@vercel/python"
     }
   ],
   "routes": [
-    {
-      "src": "/static/(.*)",
-      "dest": "/staticfiles/$1"
-    },
-    {
-      "src": "/css/(.*)",
-      "dest": "/css/$1"
-    },
-    {
-      "src": "/js/(.*)",
-      "dest": "/js/$1"
-    },
-    {
-      "src": "/admin/(.*)",
-      "dest": "pirateone_backend/wsgi.py"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "pirateone_backend/wsgi.py"
-    },
     {
       "src": "/(.*)",
       "dest": "pirateone_backend/wsgi.py"
