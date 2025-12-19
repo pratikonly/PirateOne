@@ -61,7 +61,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'pirateone_backend.wsgi.application'
+WSGI_APPLICATION = 'pirateone_backend.wsgi.app'
 
 DATABASE_URL = os.environ.get('DATABASE_URL')
 if DATABASE_URL:
