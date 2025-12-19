@@ -35,6 +35,7 @@ urlpatterns = [
 from django.views.static import serve
 
 urlpatterns += [
+    re_path(r'^static/(?P<path>.*)$', serve, {'document_root': str(settings.STATIC_ROOT)}),
     re_path(r'^css/(?P<path>.*)$', serve, {'document_root': str(settings.BASE_DIR / 'css')}),
     re_path(r'^js/(?P<path>.*)$', serve, {'document_root': str(settings.BASE_DIR / 'js')}),
 ]

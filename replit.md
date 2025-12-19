@@ -160,6 +160,12 @@ After deploying to Vercel, you'll need to run migrations on your production data
 - **Deployment**: Vercel (configured)
 
 ## Recent Changes
+- 2025-12-19: Fixed static file serving and admin panel styling
+  - Fixed DEBUG setting to True for development static file serving
+  - Collected Django static files (137 files) for admin panel
+  - Added /static/ route to serve admin CSS and JS files
+  - Admin panel now displays with perfect styling
+  - Build script now includes collectstatic for Vercel deployment
 - 2025-12-18: Added Django backend with admin panel
   - Implemented Django backend with PostgreSQL database
   - Created admin panel to manage users, watchlists, history, and ratings
