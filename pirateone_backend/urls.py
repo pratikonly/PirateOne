@@ -32,9 +32,9 @@ urlpatterns = [
     path('config.js', config_js_view, name='config_js'),
 ]
 
-if settings.DEBUG:
-    from django.views.static import serve
-    urlpatterns += [
-        re_path(r'^css/(?P<path>.*)$', serve, {'document_root': os.path.join(settings.BASE_DIR, 'css')}),
-        re_path(r'^js/(?P<path>.*)$', serve, {'document_root': os.path.join(settings.BASE_DIR, 'js')}),
-    ]
+from django.views.static import serve
+
+urlpatterns += [
+    re_path(r'^css/(?P<path>.*)$', serve, {'document_root': str(settings.BASE_DIR / 'css')}),
+    re_path(r'^js/(?P<path>.*)$', serve, {'document_root': str(settings.BASE_DIR / 'js')}),
+]
