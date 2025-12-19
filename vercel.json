@@ -1,69 +1,26 @@
 {
   "version": 2,
-  "buildCommand": "bash build.sh",
   "builds": [
     {
-      "src": "api/vercel_handler.py",
-      "use": "@vercel/python",
+      "src": "build.sh",
+      "use": "@vercel/static-build",
       "config": {
-        "maxLambdaSize": "15mb",
-        "runtime": "python3.11",
-        "includeFiles": "**"
+        "distDir": "staticfiles"
       }
     },
     {
-      "src": "css/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "js/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "*.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "favicon.svg",
-      "use": "@vercel/static"
+      "src": "pirateone_backend/wsgi.py",
+      "use": "@vercel/python"
     }
   ],
   "routes": [
     {
-      "src": "/admin/(.*)",
-      "dest": "api/vercel_handler.py"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "api/vercel_handler.py"
-    },
-    {
-      "src": "/config.js",
-      "dest": "api/vercel_handler.py"
-    },
-    {
       "src": "/static/(.*)",
-      "dest": "/$1"
-    },
-    {
-      "src": "/css/(.*)",
-      "dest": "/css/$1"
-    },
-    {
-      "src": "/js/(.*)",
-      "dest": "/js/$1"
-    },
-    {
-      "src": "/(.*\\.html)",
-      "dest": "/$1"
-    },
-    {
-      "src": "/favicon.svg",
-      "dest": "/favicon.svg"
+      "dest": "/staticfiles/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "pirateone_backend/wsgi.py"
     }
   ]
 }
