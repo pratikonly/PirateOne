@@ -1,3 +1,10 @@
+console.log("MAIN JS STARTED");
+
+import { getCurrentUser, logout } from "./auth.js";
+import { getTrendingMovies, getPopularTVShows } from "./api.js";
+import { getTrendingAnime } from "./django-api.js";
+import { getTMDBImageUrl, createContentCard } from "./browse.js";
+
 let currentSlide = 0;
 let slideshowMovies = [];
 let slideshowInterval;
@@ -6,6 +13,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (window.location.pathname.includes('login.html') || window.location.pathname.includes('register.html')) {
         return;
     }
+
+    console.log("ABOUT TO CALL getCurrentUser");
 
     const user = getCurrentUser();
     if (user) {
