@@ -94,10 +94,11 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATIC_ROOT = str(BASE_DIR / 'staticfiles')
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 STATICFILES_DIRS = [
-    str(BASE_DIR / 'css'),
-    str(BASE_DIR / 'js'),
+    BASE_DIR / 'css',
+    BASE_DIR / 'js',
 ]
 STORAGES = {
     "staticfiles": {
