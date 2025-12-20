@@ -5,5 +5,11 @@
       "src": "pirateone_backend/wsgi.py",
       "use": "@vercel/python"
     }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "pirateone_backend/wsgi.py"
+    }
   ]
 }
