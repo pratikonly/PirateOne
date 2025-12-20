@@ -1,4 +1,20 @@
 {
   "version": 2,
-  "framework": "django"
+  "builds": [
+    {
+      "src": "pirateone_backend/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "pirateone_backend/wsgi.py"
+    }
+  ],
+  "functions": {
+    "pirateone_backend/wsgi.py": {
+      "runtime": "python3.11"
+    }
+  }
 }
