@@ -97,9 +97,9 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_DIRS = [
-('css', BASE_DIR / 'css'),
-('js', BASE_DIR / 'js'),
+    BASE_DIR / 'static',
 ]
+
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 

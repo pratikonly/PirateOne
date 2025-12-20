@@ -236,3 +236,7 @@ function addToWatchlist(id, type, title, poster) {
         alert('Already in watchlist!');
     }
 }
+
+window.addToWatchlist = addToWatchlist;
+window.nextSlide = nextSlide;
+window.previousSlide = previousSlide;
