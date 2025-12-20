@@ -15,11 +15,11 @@
   ],
   "routes": [
     {
-      "src": "/css/(.*)",
+      "src": "/static/(.*)",
       "dest": "/staticfiles/$1"
     },
     {
-      "src": "/js/(.*)",
+      "src": "/(.*\\.js)",
       "dest": "/staticfiles/$1"
     },
     {
